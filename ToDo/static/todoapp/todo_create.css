@@ -1,0 +1,144 @@
+
+.i-am-centered {
+  margin-left: 40%;
+    max-width: 300px;
+    margin-top: 8%;
+    padding: 10px 10px 10px 20px;
+    border: 2px solid grey;
+    opacity: .85;
+    font-weight: bold;
+    border-radius:15px 15px 0px 0px ;
+
+}
+
+.summary{
+  margin-left: 40%;
+    max-width: 400px;
+    margin-top: 8%;
+    padding: 10px 10px 10px 20px;
+    border: 2px solid grey;
+    opacity: .85;
+    font-weight: bold;
+    border-radius:15px 15px 0px 0px ;
+
+}
+.summary_detail_btn {
+  position: absolute;
+  left: 57%;
+  top:18%;
+}
+
+
+.mylist{
+    width: 83%;
+    position: absolute;
+    top: 57px;
+    left: 19%;
+}
+
+
+#mylist_header{
+  position: absolute;
+  left: 40%;
+  top: 1%;
+
+}
+
+#notask{
+  position: absolute;
+  left: 40%;
+  top: 40%;
+}
+
+
+
+.mylist_sort {
+  width: 15%;
+  position:absolute;
+   top:15%;
+   right:2%;
+  background-color: #D3D3D3;
+  text-align: center;
+}
+
+.mylist_sort .inside_sort{
+  background-color:black;
+  color: white;
+}
+
+.external_task_detail{
+  position: absolute;
+  top:20% ;
+  left: 30%;
+  
+}
+.task_detail {
+  padding-top: 2%;
+  padding-right: 1%;
+  padding-left: 1.5rem;
+  border-bottom: 1px solid #D3D3D3;
+  border-left: 6px solid black;
+  border-spacing: 20%;
+  
+}
+
+.detail_discription{
+
+  width: 30%;
+  padding: 3%;
+  position:absolute;
+  top: 30%;
+   right:2%;
+  background-color: #D3D3D3;
+  text-align: center;
+
+}
+
+
+
+
+body {
+  overflow-x: hidden;
+  
+}
+
+#sidebar-wrapper {
+  min-height: 100vh;
+  margin-left: -15rem;
+  -webkit-transition: margin .25s ease-out;
+  -moz-transition: margin .25s ease-out;
+  -o-transition: margin .25s ease-out;
+  transition: margin .25s ease-out;
+}
+
+#sidebar-wrapper .sidebar-heading {
+  padding: 0.875rem 1.25rem;
+  font-size: 1.2rem;
+}
+
+#sidebar-wrapper .list-group {
+  width: 15rem;
+}
+
+#page-content-wrapper {
+  min-width: 100vw;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+  margin-left: 0;
+}
+
+@media (min-width: 768px) {
+  #sidebar-wrapper {
+    margin-left: 0;
+  }
+
+  #page-content-wrapper {
+    min-width: 0;
+    width: 100%;
+  }
+
+  #wrapper.toggled #sidebar-wrapper {
+    margin-left: -15rem;
+  }
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{%extends 'todoapp/base.html'%}
+{% load crispy_forms_tags %}
+
+{% block logout_block %}
+<li class="nav-item active">
+       <a class="nav-link" href="/signup">Sign Up</a>
+  </li>
+  <li class="nav-item">
+        <a class="nav-link" href="/accounts/login">Login</a>
+    </li>
+{% endblock %}
+
+{% block body_block %}
+
+  <div class="i-am-centered">
+  <form method="post">
+  	<legend>Login </legend>
+    {%csrf_token%}
+    {{form|crispy}}<br>
+    <input type="submit" class="btn btn-success" value="Login">
+  </form>
+</div>
+
+{%endblock%}

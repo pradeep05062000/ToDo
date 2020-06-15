@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+{% extends "todoapp/base2.html" %}
+
+{% block body_block %}
+{{ block.super }}
+
+ <div class="bg-light border-right" id="sidebar-wrapper">
+      <div class="sidebar-heading">Sort By</div>
+      <div class="list-group list-group-flush">
+
+        <a href="/mylist/todo" class="list-group-item list-group-item-action bg-light">To Do</a>
+        <a href="/mylist/inProgress" class="list-group-item list-group-item-action bg-light">In Progress</a>
+        <a href="/mylist/done" class="list-group-item list-group-item-action bg-light">Done</a>
+        
+      </div>
+    </div>
+
+
+    {% if alldata %}
+        <div class="mylist">
+          {% if todo %}
+        <h1 id="mylist_header">Tasks ToDo</h1><br><br><br>
+          {% elif inProgress %}
+        <h1 id="mylist_header">Tasks In Progress</h1><br><br><br>
+          {% elif done %}
+        <h1 id="mylist_header">Tasks Done</h1><br><br><br>
+          {% else %}
+        <h1 id="mylist_header">All Tasks</h1><br><br><br>
+          {% endif %}
+          <form method="post">
+             {%csrf_token%}
+
+         <table  id="myTable" class="table table-bordered sortable" style="width: 95% ; margin-left: 10px">
+          <thead class="thead-light">
+      <tr>
+        <th style="width: 15%">
+          <input type="checkbox" id="selecttodo" onclick="selectAll(this,document.getElementsByClassName('flag_mylist'))"><span style="margin-left: 20px"><input type="submit" name="submit" class="btn btn-danger btn-sm" value="Delete">
+          </span>
+        </th>
+        <th class = "first">Task</th>
+        <th class= "second")>Due Date</th>
+        <th >Due Time</th>
+        
+      </tr>
+        </thead>
+      {%for alldata in alldata%}
+        <tr>
+          <td><input type="checkbox" class="flag_mylist"  name="{{alldata.id}}">
+          
+          </td>
+          <td class="task" ><a href="/{{alldata.id}}/discription">{{alldata.task}}</a></td>
+          <td class="date">{{alldata.date}}</td>
+          <td class="time" >{{alldata.time}}</td>
+        </tr>  
+      {%endfor%}
+      
+                </table>
+                
+          </form>
+      </div>
+
+    {% else %}
+        <h1 id="notask">No Tasks Found</h1>
+    {% endif%}
+      
+
+{%if data%}
+<script onload="testfunction()">
+  function testfunction(){
+
+      console.log("hello");
+    var data1 = [
+        {%for data2 in data%}
+          "{{data2.date}}","{{data2.time}}",
+        {%endfor%}
+      ];
+    var task = [
+        {%for data2 in data%}
+          "{{data2.task}}",
+        {%endfor%}
+      ];
+  
+
+      var element;
+      element=setInterval(function(){logical(data1,task,element);}, 20000);  
+
+  }
+</script>
+{%endif%}
+
+
+{%endblock%}
+
+

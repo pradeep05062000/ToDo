@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% extends "todoapp/base2.html" %}
+
+{% block body_block %}
+{{ block.super }}      
+
+      {%if summary_data%}
+<div class="summary">
+    <legend> Task Summary</legend>
+    <span class="summary_detail_btn"><a href="/{{id}}/detail" class="btn btn-outline-primary btn-sm">More Details</a></span><br>
+    
+    <table class="table">
+      <tr>
+        <th >Create/Updated</th>
+        <th >Date and Time</th>
+      </tr>
+      {%for data in summary_data%}
+        <tr>
+          {% if data.created_update != None %}
+          <td >{{data.created_update}}</td>
+          <td >{{data.dateTime}}</td>
+          {% endif%}
+        </tr>
+      {%endfor%}
+    </table>
+</div>
+{%endif%}
+
+<script >
+  function testfunction(){
+    
+
+    var data1 = [
+        {%for data2 in data%}
+          "{{data2.date}}","{{data2.time}}",
+        {%endfor%}
+      ];
+    var task = [
+        {%for data2 in data%}
+          "{{data2.task}}",
+        {%endfor%}
+      ];
+  
+
+      var element;
+      element=setInterval(function(){logical(data1,task,element);}, 20000);
+      
+
+  }
+</script>
+
+ {%endblock%}
+
+

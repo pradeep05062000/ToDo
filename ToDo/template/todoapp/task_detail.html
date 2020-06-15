@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% extends "todoapp/base2.html" %}
+
+{% block body_block %}
+{{ block.super }}
+
+<div class = "external_task_detail">
+{%if detail_data%}
+  <h4>Task Details</h4>
+      {%for data in detail_data%}
+        <div class="task_detail" >
+          {% if data.modefied_detail != None %}
+             {{data.modefied_detail|linebreaks}}
+          {% endif %}
+        </div>
+      {%endfor%}
+    
+{%endif%}
+<br><br>
+</div>
+
+<script >
+  function testfunction(){
+    
+
+    var data1 = [
+        {%for data2 in data%}
+          "{{data2.date}}","{{data2.time}}",
+        {%endfor%}
+      ];
+    var task = [
+        {%for data2 in data%}
+          "{{data2.task}}",
+        {%endfor%}
+      ];
+  
+
+      var element;
+      element=setInterval(function(){logical(data1,task,element);}, 20000);
+      
+
+  }
+</script>
+
+
+ {%endblock%}
+
+
+<script type="text/javascript">
+  
+</script>

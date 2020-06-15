@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+{% extends "todoapp/base2.html" %}
+
+{% block body_block %} 
+{{ block.super }}
+    <div class="i-am-centered">
+       <form method="post">
+            <fieldset>
+                  <legend>Update Task</legend>
+                  {%csrf_token%}
+                  <p style="font-size:18px;">Task:-<span style="font-style: italic; font-size:17px;">{{task}}</span></p>
+                  {%if status == 'todo'%}
+                   <select name="status">
+                         <option value="todo" selected>ToDo</option>
+                          <option value="inProgress" >In progress</option>
+                          <option value="done" >Done</option>
+                    </select>
+                   {%endif%} 
+                   {%if status == 'inProgress'%}
+                   <select name="status">
+                         <option value="todo" >ToDo</option>
+                          <option value="inProgress" selected>In progress</option>
+                          <option value="done" >Done</option>
+                    </select>
+                   {%endif%} 
+                   {%if status == 'done'%}
+                   <select name="status">
+                         <option value="todo" >ToDo</option>
+                          <option value="inProgress" >In progress</option>
+                          <option value="done" selected>Done</option>
+                    </select>
+                   {%endif%} 
+                  <br>
+                  <label for="date">Due Date  </label>
+                  <p><input type="date" name="date" id="date" value="{{date}}"></p>
+
+                  <label for="time">Due Time  </label>
+                  <p><input type="time" name="time" id="time" value="{{time}}"></p>
+
+                  <p>Time format(24hr)</p>
+                  <label for="time">Discription  </label>
+                  <p><textarea name="discription">{{discription1}}</textarea></p>
+                  <input type="submit" class="btn btn-success" value="Update Task">
+            </fieldset>
+      </form>
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+          <script>alert("{{message}}");</script>
+        {% endfor %}
+ 	{% endif %}
+
+ 	{%if error%}
+    <script type="text/javascript">
+      alert("Please fill all fields");
+    </script>   
+    {%endif%}
+
+<script >
+  function testfunction(){
+    
+    var data1 = [
+        {%for data2 in data%}
+          "{{data2.date}}","{{data2.time}}",
+        {%endfor%}
+      ];
+    var task = [
+        {%for data2 in data%}
+          "{{data2.task}}",
+        {%endfor%}
+      ];
+  
+      console.log('inside update');
+      var element;
+      element=setInterval(function(){logical(data1,task,element);}, 20000);      
+
+  }
+</script>
+
+{% endblock %}
+
+
+

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+{% extends "todoapp/base2.html" %}
+
+{% block body_block %}
+{{ block.super }}
+
+    <div class="i-am-centered">
+       <form method="post">
+            <fieldset>
+                  <legend>Create Task</legend>
+                  {%csrf_token%}
+                  <label for="task">Task Name </label>
+                  <p><input type="text" name="task" id="task"></p>
+
+                  <label for="date">Due Date  </label>
+                  <p><input type="date" name="date" id="date" ></p>
+
+                  <label for="time">Due Time  </label>
+                  <p><input type="time" name="time" id="time" ></p>
+
+                  <p>Time format(24hr)</p>
+                  <label for="time">Discription  </label>
+                  <p><textarea name="discription" ></textarea></p>
+                  <input type="submit" class="btn btn-primary" value="Create Task">
+            </fieldset>
+      </form>
+    </div>
+
+    {%if error%}
+    <script type="text/javascript">
+      alert("Please fill all fields");
+    </script>   
+    {%endif%}
+
+<script >
+  function testfunction(){
+    
+    var data1 = [
+        {%for data2 in data%}
+          "{{data2.date}}","{{data2.time}}",
+        {%endfor%}
+      ];
+    var task = [
+        {%for data2 in data%}
+          "{{data2.task}}",
+        {%endfor%}
+      ];
+  
+      console.log('hello');
+      var element;
+      element=setInterval(function(){logical(data1,task,element);}, 20000);
+
+      
+
+  }
+</script>
+  
+{%endblock%}
+

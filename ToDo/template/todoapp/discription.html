@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+{% extends "todoapp/base2.html" %}
+
+{% block body_block %}
+{{ block.super }} 
+
+      
+<div class="mylist">
+  <br><br>
+  <a href="/{{id}}/summary" class="btn btn-primary">Summary</a>
+  <a href="/{{id}}/update" class="btn btn-primary">Update</a><br><br>
+  <table  class="table table-bordered sortable" style="width: 70%">
+    <thead class="thead-light">
+      <tr>
+        <th>Task</th>
+        <th>Due Date</th>
+        <th>Due Time</th>
+        <th>Discription</th>
+      </tr>
+    </thead>
+        <tr>
+          <td>{{task}}</a></td>
+          <td>{{date}}</td>
+          <td>{{time}}</td>
+          {% if discription != '' %}
+              <td>{{discription|linebreaks}}</td>
+          {% else %}
+              <td>-&nbsp&nbsp(empty)</td>
+          {%endif%}
+
+        </tr>
+    </table><br>
+    
+    <div style="border-bottom: 2px solid grey; width:70%; "></div><br>
+
+    <div class="task_discription">
+    <table class="table" style="width: 70%">
+      <tr>
+        <th >Discription Details</th>
+        <th >Date&Time</th>
+      </tr>
+      {%for data in discription_data%}
+        <tr>
+          {% if data.discription_summary != '' %}
+            <script type="text/javascript">
+              console.log(typeof {{data.discription_summary}} );
+            </script>
+             <td>{{data.discription_summary|linebreaks}}</td>
+             <td>{{data.dateTime}}</td>
+          {% else %}
+            <td>-&nbsp&nbsp(empty)</td>
+            <td>{{data.dateTime}}</td>
+          {% endif %}
+
+        </tr>
+      {%endfor%}
+    </table>
+
+</div>
+</div>
+
+
+<script >
+  function testfunction(){
+    
+
+    var data1 = [
+        {%for data2 in data%}
+          "{{data2.date}}","{{data2.time}}",
+        {%endfor%}
+      ];
+    var task = [
+        {%for data2 in data%}
+          "{{data2.task}}",
+        {%endfor%}
+      ];
+  
+
+      var element;
+      element=setInterval(function(){logical(data1,task,element);}, 30000);
+      
+
+  }
+</script>
+
+
+ {%endblock%}
+
+

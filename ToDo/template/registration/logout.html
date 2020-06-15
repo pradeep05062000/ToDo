@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{%extends 'todoapp/base.html'%}
+
+{% block logout_block %}
+<li class="nav-item active">
+       <a class="nav-link" href="/signup">Sign Up</a>
+  </li>
+  <li class="nav-item">
+        <a class="nav-link" href="/accounts/login">Login</a>
+    </li>
+{% endblock %}
+
+{% block body_block %}
+  <div class="jumbotron">
+  <h1>Successfully Logged Out</h1>
+</div>
+{%endblock%}
