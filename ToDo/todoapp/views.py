@@ -5,9 +5,9 @@ from django.http import HttpResponseRedirect
 from todoapp.models import ToDoModel,SummaryModel
 from django.contrib.auth.models import User
 from django.contrib import messages
-from datetime import datetime
+from datetime import datetime,time
 from django.http import Http404
-from todoapp.supporting_python import task_detail_modifed,discription_modefied
+from todoapp.supporting_python import task_detail_modifed
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 
 
@@ -79,13 +79,12 @@ def reset_password_view(request):
 
 @login_required                 #################################login_required is the decorater use to restrict the user to in that before authenticating itself
 def todo_create_view(request):
-    error=False
+    error = True
     if request.method=='POST':
-        if request.POST.get('task') and request.POST.get('date') and request.POST.get('time'):
             mylist_data=ToDoModel()  
             mylist_data.task=request.POST.get('task') 
-            mylist_data.date=request.POST.get('date')
-            mylist_data.time=request.POST.get('time')
+            mylist_data.date=datetime(int(request.POST.get('year')),int(request.POST.get('month')),int(request.POST.get('day'))).date()
+            mylist_data.time=time(int(request.POST.get('hour')),int(request.POST.get('min')))
             mylist_data.discription=request.POST.get('discription') 
             mylist_data.user=request.user
             mylist_data.save() 
@@ -99,10 +98,9 @@ def todo_create_view(request):
             summary.save()    
 
             return redirect('/mylist/mylist')
-        else:
-            error=True       
-    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo') 
-    return render(request,'todoapp/todo_create.html',{'current_user':request.user,'data':mylist_data,"error":error})
+
+    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo')
+    return render(request,'todoapp/todo_create.html',{'current_user':request.user,'data':mylist_data})
 
 
 #############################################################################################################################
@@ -111,12 +109,14 @@ def updatelist_view(request,id):
     error=False
     if request.method=='POST':
         mylist_data=ToDoModel.objects.get(id=id)
-        summary=SummaryModel()
-        if request.POST.get('date') and request.POST.get('time') :  
-            modefied_dt = task_detail_modifed(request.POST.get('discription'),request.POST.get('status'), request.POST.get('date'),request.POST.get('time'),id)
-            if modefied_dt != None :
-                mylist_data.date=request.POST.get('date')
-                mylist_data.time=request.POST.get('time') 
+        summary=SummaryModel() 
+        modefied_dt = task_detail_modifed(request.POST.get('discription'),request.POST.get('status'), 
+                datetime(int(request.POST.get('year')),int(request.POST.get('month')),int(request.POST.get('day'))).date(),
+                time(int(request.POST.get('hour')),int(request.POST.get('min'))),id)
+
+        if modefied_dt != None :
+                mylist_data.date=datetime(int(request.POST.get('year')),int(request.POST.get('month')),int(request.POST.get('day'))).date()
+                mylist_data.time=time(int(request.POST.get('hour')),int(request.POST.get('min')))
                 mylist_data.status=request.POST.get('status')
                 mylist_data.discription=request.POST.get('discription')
                 mylist_data.user=request.user         
@@ -129,17 +129,17 @@ def updatelist_view(request,id):
                 summary.created_update="updated"
                 summary.save() 
                 messages.success(request, 'Task Updated Successfully')
-            else:
-                updated = None
-                messages.info(request, 'No changes detected while updating task')
-            
         else:
-            error=True
+            updated = None
+            messages.info(request, 'No changes detected while updating task') 
         
 
     data=ToDoModel.objects.get(id=id)
+    date_lst=str(data.date).split('-')
+    time_lst=str(data.time).split(':')
     mylist_data =ToDoModel.objects.filter(user=request.user,status='todo')
-    return render(request,'todoapp/update.html',{'current_user':request.user,'discription1':data.discription,'task':data.task,'time':str(data.time),'date':str(data.date),'status':data.status,'data':mylist_data,'error':error}) 
+    return render(request,'todoapp/update.html',{'current_user':request.user,"status":data.status,'discription':data.discription,'task':data.task,
+        'day':int(date_lst[2]),'month':date_lst[1],'year':int(date_lst[0]),'hour':time_lst[0],'min':time_lst[1]}) 
 
 
 ################################################################################################################################################################################################################################
@@ -152,7 +152,8 @@ def discription_view(request,id):
     for x in discription_data:
         if x.discription_summary == '':
             print(type(x.discription_summary))
-    return render(request,'todoapp/discription.html',{"discription_data":discription_data,'id':id,'discription':data.discription,'current_user':request.user,'task':data.task,'time':data.time,'date':data.date,'data':mylist_data}) 
+    return render(request,'todoapp/discription.html',{"discription_data":discription_data,'id':id,'discription':data.discription,
+        'current_user':request.user,'task':data.task,'time':data.time,'date':data.date,'data':mylist_data}) 
 
 def summary_view(request,id):
     data=ToDoModel.objects.get(id=id)

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime,time
 from todoapp.models import ToDoModel
 
 
@@ -9,13 +9,13 @@ def task_detail_modifed(disciption,status,date,time,id):
     now=datetime.now()
     preDate=date_format(str(mylist_data.date))
     preTime = time_format(str(mylist_data.time))
-    date1 = date_format(date)
-    time1=time_format(time)
-
-    if date != str(mylist_data.date):
+    date1 = date_format(str(date))
+    time1=time_format(str(time))
+    
+    if str(date) != str(mylist_data.date):
         d = 'Due date was modified from {} to {} at {}, {}\n'.format(preDate,date1,now.strftime("%b %d, %Y"),now.strftime("%I:%M %p").lower()) 
 
-    if time != str(mylist_data.time):
+    if str(time) != str(mylist_data.time):
         t = ' Due time was modified from {} to {} at {}, {}\n'.format(preTime,time1,now.strftime("%b %d, %Y"),now.strftime("%I:%M %p").lower()) 
 
     if mylist_data.status != status :
@@ -97,11 +97,9 @@ def time_format(time):
 #########################################################################################################
 
 
-def discription_modefied(disciption,id):
-    mylist_data=ToDoModel.objects.get(id=id)
-    print(disciption,mylist_data.discription)
-    if mylist_data.discription != disciption :
-        return True
+
+
+        
 
 
 

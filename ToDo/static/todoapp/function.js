@@ -1,5 +1,3 @@
-
- 
  
 Date.prototype.toShortFormat = function() {
 
@@ -38,10 +36,10 @@ function logical(data1,task,element){
   var current_date = anyDate.toShortFormat();
   var current_time = formatAMPM(new Date());
   var current_dt = current_date+current_time;
-	var timearr =[];
+  var timearr =[];
     var i;
     //clearInterval(element);
-	for(i=0;i<(data1.length)-1;){
+  for(i=0;i<(data1.length)-1;){
         timearr[timearr.length]=data1[i]+data1[i+1];
         i +=2;
       }
@@ -76,6 +74,68 @@ function selectAll(mainCheckBox,allCheckboxes){
   }
 
 
-function sort_() {
-  alert("hello");
+function form_check() {
+    var task = 'task',day,month,year,hr,min,text,date,valid;
+    console.log("helllllllllllllll")
+    try{
+      task=document.getElementById("task").value;
+    }
+    finally{
+    day=document.getElementById("create_day").value;
+    month=document.getElementById("create_month").value;
+    year=document.getElementById("create_year").value;
+    hr=document.getElementById("create_hour").value;
+    min=document.getElementById("create_min").value;
+    valid=document.getElementById("preventsubmit");
+    if (task === '') {
+      console.log("inside task");
+      text = "*Input Required";
+      document.getElementById("valid_task").innerHTML = text;
+      valid.addEventListener("submit", function(event){
+      event.preventDefault()
+    });
+    }
+    else {
+      document.getElementById("valid_task").innerHTML = '';
+    }
+
+    if (isNaN(day) || isNaN(year) || year==='' || year === '0000' || day === '' || month === ''){
+      text = "*Invalid Date";
+      document.getElementById("valid_date").innerHTML = text;
+      valid.addEventListener("submit", function(event){
+      event.preventDefault()
+    });
+    }
+    else {
+        date = year + "-" + month + "-" + day;
+        date =new Date(date);
+        if("Invalid Date" === date.toString()) {
+          text = "*Invalid Date";
+          document.getElementById("valid_date").innerHTML = text;
+          valid.addEventListener("submit", function(event){
+          event.preventDefault()
+           });
+        }
+        else {
+           document.getElementById("valid_date").innerHTML = '';
+        }
+    }       
+
+    if (isNaN(hr) || hr < 0 || hr > 23 || hr === '' || isNaN(min) || min < 0 || min > 59 || min === '') {
+      text = "*Invalid Time";
+      document.getElementById("valid_time").innerHTML = text;
+      valid.addEventListener("submit", function(event){
+      event.preventDefault()
+    });
+    } 
+    else{
+      document.getElementById("valid_time").innerHTML = '';
+      }
+
+    }
+
 }
+
+
+
+

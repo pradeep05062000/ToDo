@@ -3,59 +3,84 @@
 
 {% block body_block %} 
 {{ block.super }}
-    <div class="i-am-centered">
-       <form method="post">
+    <div class="form_create" >
+       <form id="preventsubmit"  method="post">
             <fieldset>
                   <legend>Update Task</legend>
                   {%csrf_token%}
                   <p style="font-size:18px;">Task:-<span style="font-style: italic; font-size:17px;">{{task}}</span></p>
-                  {%if status == 'todo'%}
-                   <select name="status">
-                         <option value="todo" selected>ToDo</option>
+                   <select class="form-control" id="select_status" name="status">
+                         <option value="todo" >ToDo</option>
                           <option value="inProgress" >In progress</option>
                           <option value="done" >Done</option>
                     </select>
-                   {%endif%} 
-                   {%if status == 'inProgress'%}
-                   <select name="status">
-                         <option value="todo" >ToDo</option>
-                          <option value="inProgress" selected>In progress</option>
-                          <option value="done" >Done</option>
-                    </select>
-                   {%endif%} 
-                   {%if status == 'done'%}
-                   <select name="status">
-                         <option value="todo" >ToDo</option>
-                          <option value="inProgress" >In progress</option>
-                          <option value="done" selected>Done</option>
-                    </select>
-                   {%endif%} 
+
+                  <p id="valid_task"></p>
                   <br>
-                  <label for="date">Due Date  </label>
-                  <p><input type="date" name="date" id="date" value="{{date}}"></p>
+                  <label for="date">Due Date </label>
+                  <br>
+                  <div class="day_style">
+                    <input type="tel" class="form-control" placeholder="Day" maxlength="2" id="create_day" name="day" size="2" value='{{day}}' badinput="false">
+                  </div>
 
-                  <label for="time">Due Time  </label>
-                  <p><input type="time" name="time" id="time" value="{{time}}"></p>
+                  <div class="month_style">
+                    <select name="month" class="form-control" id="create_month"  aria-label="month-label">
+                      <option id="1" value="1">January</option>
+                      <option id="2" value="2">February</option>
+                      <option id="3" value="3">March</option>
+                      <option id="4" value="4">April</option>
+                      <option id="5" value="5">May</option>
+                      <option id="6" value="6">June</option>
+                      <option id="7" value="7">July</option>
+                      <option id="8" value="8">August</option>
+                      <option id="9" value="9">September</option>
+                      <option id="10" value="10">October</option>
+                      <option id="11" value="11">November</option>
+                      <option id="12" value="12">December</option>
+                    </select>
+                  </div>
+                   
+                    <div >
+                    <input type="tel" class="form-control" placeholder="Year" maxlength="4" id="create_year" name="year" value="{{year}}" badinput="false">
+                    </div>
+                    <p id="valid_date"></p>
+                    <br>
+                    <label>Due Time  </label>
+                    <br>
+                  <div class="hour_style"> 
+                    <input type="tel" class="form-control" placeholder="hr" maxlength="2" id="create_hour" name="hour" value="{{hour}}"  badinput="false">
+                  </div>
+                  <div class="min_style"> 
+                    <input type="tel" class="form-control" placeholder="min" maxlength="2" id="create_min" name="min" value ="{{min}}"  badinput="false">
+                  </div>
+                  <p>Time Format 24hr (00:00 to 23:59)</p>
+                  <p id="valid_time"></p>
+                  <label >Discription  </label>
+                  <textarea class="form-control" name="discription" style="width:86%;">{{discription}}</textarea>
+                  <br>
+                  <input  onclick="form_check()" type="submit"  class="btn btn-primary" value="Update Task">
 
-                  <p>Time format(24hr)</p>
-                  <label for="time">Discription  </label>
-                  <p><textarea name="discription">{{discription1}}</textarea></p>
-                  <input type="submit" class="btn btn-success" value="Update Task">
             </fieldset>
       </form>
-    </div>
     {% if messages %}
         {% for message in messages %}
-          <script>alert("{{message}}");</script>
+          <script>
+            alert("{{message}}");
+          </script>
         {% endfor %}
- 	{% endif %}
+  {% endif %}
 
- 	{%if error%}
-    <script type="text/javascript">
-      alert("Please fill all fields");
-    </script>   
-    {%endif%}
-
+  <script >
+    function monthSelect(val) {
+          document.getElementById("create_month").value = String(Number(val));
+        }
+    function statusSelect(val) {
+      console.log(val);
+          document.getElementById("select_status").value = val;
+        }
+    statusSelect("{{status}}");
+    monthSelect("{{month}}");
+  </script>
 <script >
   function testfunction(){
     
@@ -78,6 +103,8 @@
 </script>
 
 {% endblock %}
+
+
 
 
 

@@ -5,31 +5,68 @@
 {% block body_block %}
 {{ block.super }}
 
-    <div class="i-am-centered">
-       <form method="post">
+    <div class="form_create">
+       <form id="preventsubmit"  method="post">
             <fieldset>
                   <legend>Create Task</legend>
                   {%csrf_token%}
                   <label for="task">Task Name </label>
-                  <p><input type="text" name="task" id="task"></p>
+                  <input type="text" class="form-control" name="task" id="task" style="width:86%;">
+                  <p id="valid_task"></p>
+                  <br>
+                  <label for="date">Due Date </label>
+                  <br>
+                  <div class="day_style">
+                    <input type="tel" class="form-control" placeholder="Day" maxlength="2" id="create_day" name="day" size="2" badinput="false">
+                  </div>
 
-                  <label for="date">Due Date  </label>
-                  <p><input type="date" name="date" id="date" ></p>
+                  <div class="month_style">
+                    <select name="month" class="form-control" id="create_month"  aria-label="month-label">
+                      <option value="" disabled selected>Month</option>
+                      <option value="1">January</option>
+                      <option value="2">February</option>
+                      <option value="3">March</option>
+                      <option value="4">April</option>
+                      <option value="5">May</option>
+                      <option value="6">June</option>
+                      <option value="7">July</option>
+                      <option value="8">August</option>
+                      <option value="9">September</option>
+                      <option value="10">October</option>
+                      <option value="11">November</option>
+                      <option value="12">December</option>
+                    </select>
+                  </div>
+                   
+                    <div >
+                    <input type="tel" class="form-control" placeholder="Year" maxlength="4" id="create_year" name="year"  badinput="false">
+                    </div>
+                    <p id="valid_date"></p>
+                    <br>
+                    <label>Due Time  </label>
+                    <br>
+                  <div class="hour_style"> 
+                    <input type="tel" class="form-control" placeholder="hr" maxlength="2" id="create_hour" name="hour"  badinput="false">
+                  </div>
+                  <div class="min_style"> 
+                    <input type="tel" class="form-control" placeholder="min" maxlength="2" id="create_min" name="min"  badinput="false">
+                  </div>
+                  <p>Time Format 24hr (00:00 to 23:59)</p>
+                  <p id="valid_time"></p>
+                  <label >Discription  </label>
+                  <textarea class="form-control" name="discription" style="width:86%;"></textarea>
+                  <br>
+                  <input  onclick="form_check()" type="submit"  class="btn btn-primary" value="Create Task">
 
-                  <label for="time">Due Time  </label>
-                  <p><input type="time" name="time" id="time" ></p>
-
-                  <p>Time format(24hr)</p>
-                  <label for="time">Discription  </label>
-                  <p><textarea name="discription" ></textarea></p>
-                  <input type="submit" class="btn btn-primary" value="Create Task">
             </fieldset>
       </form>
+
     </div>
+    <br><br><br>
 
     {%if error%}
     <script type="text/javascript">
-      alert("Please fill all fields");
+      form_check();
     </script>   
     {%endif%}
 

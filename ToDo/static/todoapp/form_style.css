@@ -1,0 +1,50 @@
+.form_create {
+  margin-left: 34%;
+    max-width: 500px;
+    margin-top: 8%;
+    padding: 10px 10px 10px 20px;
+    border: 2px solid grey;
+    opacity: .85;
+    font-weight: bold;
+    border-radius:15px 15px 0px 0px ;
+
+}
+
+.day_style {
+	position: relative;
+	float:left;
+}
+
+.month_style{
+	padding-left: 20px;
+	padding-right: 20px;
+	float:left;
+}
+
+.hour_style {
+	float:left;
+}
+
+
+#create_month{
+	width: 120px;
+}
+#create_day {
+	width:120px
+}
+#create_year {
+	width:120px
+}
+
+#create_hour {
+	width:50px;
+}
+
+#create_min{
+	width:50px;
+}
+
+
+#select_status{
+	width:86%;
+}
