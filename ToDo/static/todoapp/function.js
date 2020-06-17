@@ -75,10 +75,13 @@ function selectAll(mainCheckBox,allCheckboxes){
 
 
 function form_check() {
-    var task = 'task',day,month,year,hr,min,text,date,valid;
+    var task = 'task',day,month,year,hr,min,text,date,valid,flag1,flag2,flag3;
     console.log("helllllllllllllll")
     try{
       task=document.getElementById("task").value;
+    }
+    catch(err){
+      
     }
     finally{
     day=document.getElementById("create_day").value;
@@ -88,51 +91,60 @@ function form_check() {
     min=document.getElementById("create_min").value;
     valid=document.getElementById("preventsubmit");
     if (task === '') {
-      console.log("inside task");
+
       text = "*Input Required";
       document.getElementById("valid_task").innerHTML = text;
-      valid.addEventListener("submit", function(event){
-      event.preventDefault()
-    });
+    flag1=false;
     }
     else {
+      console.log(task);
       document.getElementById("valid_task").innerHTML = '';
+      flag1 = true;
     }
 
     if (isNaN(day) || isNaN(year) || year==='' || year === '0000' || day === '' || month === ''){
       text = "*Invalid Date";
       document.getElementById("valid_date").innerHTML = text;
-      valid.addEventListener("submit", function(event){
-      event.preventDefault()
-    });
+      flag2 = false;
     }
     else {
         date = year + "-" + month + "-" + day;
         date =new Date(date);
         if("Invalid Date" === date.toString()) {
+          flag2 = false;
           text = "*Invalid Date";
           document.getElementById("valid_date").innerHTML = text;
-          valid.addEventListener("submit", function(event){
-          event.preventDefault()
-           });
         }
         else {
+           flag2 = true;
            document.getElementById("valid_date").innerHTML = '';
         }
     }       
 
     if (isNaN(hr) || hr < 0 || hr > 23 || hr === '' || isNaN(min) || min < 0 || min > 59 || min === '') {
+      flag3 = false;
       text = "*Invalid Time";
       document.getElementById("valid_time").innerHTML = text;
-      valid.addEventListener("submit", function(event){
-      event.preventDefault()
-    });
+      
     } 
     else{
+       flag3 = true;
       document.getElementById("valid_time").innerHTML = '';
       }
 
     }
+
+    if (flag1 && flag2 && flag3) {
+      console.log("inside submit");
+      valid.submit();
+    }
+    else {
+      console.log(flag1,flag2,flag3);
+       valid.addEventListener("submit", function(event){
+      event.preventDefault()
+    });
+    }
+
 
 }
 

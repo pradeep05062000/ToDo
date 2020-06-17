@@ -7,7 +7,7 @@ class ToDoAdmin(admin.ModelAdmin):
     list_filter=['task','time','date']
 
 class SummaryAdmin(admin.ModelAdmin):
-	list_display=['taskId','discription_summary','dateTime']
+	list_display=['taskId','description_summary','dateTime']
 
 
 

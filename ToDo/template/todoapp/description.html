@@ -15,15 +15,15 @@
         <th>Task</th>
         <th>Due Date</th>
         <th>Due Time</th>
-        <th>Discription</th>
+        <th>Description</th>
       </tr>
     </thead>
         <tr>
           <td>{{task}}</a></td>
           <td>{{date}}</td>
           <td>{{time}}</td>
-          {% if discription != '' %}
-              <td>{{discription|linebreaks}}</td>
+          {% if description != '' %}
+              <td>{{description|linebreaks}}</td>
           {% else %}
               <td>-&nbsp&nbsp(empty)</td>
           {%endif%}
@@ -33,23 +33,24 @@
     
     <div style="border-bottom: 2px solid grey; width:70%; "></div><br>
 
-    <div class="task_discription">
+    <div class="task_description">
     <table class="table" style="width: 70%">
       <tr>
-        <th >Discription Details</th>
+        <th >Description Details</th>
         <th >Date&Time</th>
       </tr>
-      {%for data in discription_data%}
+      {%for data in description_data%}
         <tr>
-          {% if data.discription_summary != '' %}
-            <script type="text/javascript">
-              console.log(typeof {{data.discription_summary}} );
-            </script>
-             <td>{{data.discription_summary|linebreaks}}</td>
+          {% if data.description_summary != '' %}
+            {% if data.description_summary != 'None' %}
+             <td>{{data.description_summary|linebreaks}}</td>
              <td>{{data.dateTime}}</td>
+             {% endif %}
           {% else %}
+            
             <td>-&nbsp&nbsp(empty)</td>
             <td>{{data.dateTime}}</td>
+            
           {% endif %}
 
         </tr>

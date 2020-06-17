@@ -8,7 +8,7 @@ urlpatterns = [
     path('signup/',v1.signup_view),
     re_path(r'^mylist/(?P<mylist_choice>[\w-]+)/$',v1.mylist_view),
     path('reset/',v1.reset_password_view),
-    path('<id>/discription',v1.discription_view),
+    path('<id>/description',v1.description_view),
     path('<id>/summary',v1.summary_view),
     path('<id>/detail',v1.task_detail_view),
     path('<id>/update',v1.updatelist_view),

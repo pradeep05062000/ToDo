@@ -16,14 +16,14 @@ class ToDoModel(models.Model):
 	date=models.DateField()
 	time=models.TimeField()
 	status=models.CharField(max_length=60,choices=CHOICES,default='todo')
-	discription=models.TextField(default=None)
+	description=models.TextField(default=None)
 
 
 
 class SummaryModel(models.Model):
     taskId=models.ForeignKey(ToDoModel,related_name='todolist',on_delete=models.CASCADE,null=True)
     dateTime=models.DateTimeField(blank=True,default=None)
-    discription_summary=models.TextField(default='None')
+    description_summary=models.TextField(default='None')
     modefied_detail=models.CharField(max_length=60,default=None,null =True)
     created_update=models.CharField(max_length=60,default=None,null =True)
 

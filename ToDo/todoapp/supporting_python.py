@@ -3,8 +3,8 @@ from todoapp.models import ToDoModel
 
 
 #################This function is used to check date and time is updated or not after submitting update form#####################
-def task_detail_modifed(disciption,status,date,time,id):
-    d,t,s,dis = False,False,False,False
+def task_detail_modifed(description,status,date,time,id):
+    d,t,s,dis,flag1,flag2,flag3,flag4 = False,False,False,False,False,False,False,False
     mylist_data=ToDoModel.objects.get(id=id)
     now=datetime.now()
     preDate=date_format(str(mylist_data.date))
@@ -13,56 +13,63 @@ def task_detail_modifed(disciption,status,date,time,id):
     time1=time_format(str(time))
     
     if str(date) != str(mylist_data.date):
+        flag1 = True
         d = 'Due date was modified from {} to {} at {}, {}\n'.format(preDate,date1,now.strftime("%b %d, %Y"),now.strftime("%I:%M %p").lower()) 
 
     if str(time) != str(mylist_data.time):
+        flag2 = True
         t = ' Due time was modified from {} to {} at {}, {}\n'.format(preTime,time1,now.strftime("%b %d, %Y"),now.strftime("%I:%M %p").lower()) 
 
     if mylist_data.status != status :
+        flag3 = True
         s = "Status was modified from {} to {} at {}, {}\n".format(mylist_data.status,status,now.strftime("%b %d, %Y"),now.strftime("%I:%M %p").lower())
     
-    if mylist_data.discription != disciption :
-        dis = "Discription was modified at {}, {}\n".format(now.strftime("%b %d, %Y"),now.strftime("%I:%M %p").lower())
- 
+    if mylist_data.description != description:
+        flag4 = True
+        dis = "Description was modified at {}, {}\n".format(now.strftime("%b %d, %Y"),now.strftime("%I:%M %p").lower())
+    
+    flag = [str(flag1) , str(flag2) , str(flag3) , str(flag4)]      
 
     if d and t and s and dis:
-        return d + s + t + dis
+        return d + s + t + dis , flag
 
     elif d and t and dis:
-        return d + t + dis
+        return d + t + dis , flag
 
     elif t and s and dis:
-        return t + s + dis
+        return t + s + dis, flag
 
     elif d and s and dis:
-        return d + s + dis
+        return d + s + dis, flag
 
     elif d and t:
-        return d + t
+        return d + t, flag
 
     elif t and s:
-        return t + s
+        return t + s,flag
 
     elif d and s:
-        return d + s 
+        return d + s,flag
 
     elif d and dis:
-        return d + dis
+        return d + dis,flag
 
     elif t and dis:
-        return t + dis
+        return t + dis,flag
 
     elif s and dis:
-        return s + dis
+        return s + dis,flag
 
     elif d:
-        return d
+        return d,flag
     elif t:
-        return t
+        return t,flag
     elif s:
-        return s
+        return s,flag
     elif dis:
-        return dis
+        return dis,flag
+    else:
+        return False,flag
     
 
 
