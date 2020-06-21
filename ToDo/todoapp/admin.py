@@ -3,7 +3,7 @@ from todoapp.models import ToDoModel,SummaryModel
 # Register your models here.
 
 class ToDoAdmin(admin.ModelAdmin):
-    list_display=['user','task','date','time']
+    list_display=['user','task','date','time','flagTask']
     list_filter=['task','time','date']
 
 class SummaryAdmin(admin.ModelAdmin):

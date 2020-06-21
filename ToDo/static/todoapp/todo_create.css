@@ -23,9 +23,9 @@
 
 }
 .summary_detail_btn {
-  position: absolute;
-  left: 57%;
-  top:18%;
+  position: relative;
+  padding-left: 40px;
+  
 }
 
 

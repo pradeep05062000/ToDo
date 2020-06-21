@@ -17,6 +17,7 @@ class ToDoModel(models.Model):
 	time=models.TimeField()
 	status=models.CharField(max_length=60,choices=CHOICES,default='todo')
 	description=models.TextField(default=None)
+	flagTask = models.CharField(max_length=60,default='no')
 
 
 

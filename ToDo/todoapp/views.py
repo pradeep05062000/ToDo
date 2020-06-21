@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from datetime import datetime,time
 from django.http import Http404
-from todoapp.supporting_python import task_detail_modifed
+from todoapp.supporting_python import task_detail_modifed,task_flag_update
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 
 
@@ -30,7 +30,8 @@ def signup_view(request):
 ###############################################################################################################################
 @login_required            
 def mylist_view(request,mylist_choice):
-    data=ToDoModel.objects.filter(user=request.user,status='todo')
+    data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
+    task_flag_update(request.user)
 
     if request.method=='POST':                              #######
         for x in request.POST:                              #   This logic is used to select and delete the multipul objects
@@ -59,6 +60,7 @@ def mylist_view(request,mylist_choice):
 ##############################################################################################################################
 @login_required
 def reset_password_view(request):
+
     
     if request.method == "POST":
         form=ResetPasswordForm(request.POST,request=request)        ########## Request is sent to constructor of ResetPasswordForm Class
@@ -73,12 +75,16 @@ def reset_password_view(request):
 
     else:
         form=ResetPasswordForm
-    return render(request,'todoapp/reset_password.html',{'form':form,'current_user':request.user})   
+
+    data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
+    task_flag_update(request.user)
+    return render(request,'todoapp/reset_password.html',{'form':form,'current_user':request.user,'data':data})   
 
 ##########################################################################################################################################
 
 @login_required                 #################################login_required is the decorater use to restrict the user to in that before authenticating itself
 def todo_create_view(request):
+    
     error = True
     if request.method=='POST':
             mylist_data=ToDoModel()  
@@ -86,6 +92,7 @@ def todo_create_view(request):
             mylist_data.date=datetime(int(request.POST.get('year')),int(request.POST.get('month')),int(request.POST.get('day'))).date()
             mylist_data.time=time(int(request.POST.get('hour')),int(request.POST.get('min')))
             mylist_data.description=request.POST.get('description') 
+            mylist_data.flagTask = "no"
             mylist_data.user=request.user
             mylist_data.save() 
 
@@ -99,7 +106,8 @@ def todo_create_view(request):
 
             return redirect('/mylist/mylist')
 
-    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo')
+    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
+    task_flag_update(request.user)
     return render(request,'todoapp/todo_create.html',{'current_user':request.user,'data':mylist_data})
 
 
@@ -113,7 +121,7 @@ def updatelist_view(request,id):
         modefied_dt,flag = task_detail_modifed(request.POST.get('description'),request.POST.get('status'), 
                 datetime(int(request.POST.get('year')),int(request.POST.get('month')),int(request.POST.get('day'))).date(),
                 time(int(request.POST.get('hour')),int(request.POST.get('min'))),id)
-        print(flag)
+        
         if modefied_dt != False :
             if flag[0] == "True":
                 mylist_data.date=datetime(int(request.POST.get('year')),int(request.POST.get('month')),int(request.POST.get('day'))).date()
@@ -123,7 +131,8 @@ def updatelist_view(request,id):
                 mylist_data.status=request.POST.get('status')
             if flag[3] == "True":
                 mylist_data.description=request.POST.get('description')
-            mylist_data.user=request.user         
+            mylist_data.user=request.user  
+            mylist_data.flagTask = "no"       
             mylist_data.save()
 
             summary.taskId=mylist_data
@@ -143,7 +152,8 @@ def updatelist_view(request,id):
     data=ToDoModel.objects.get(id=id)
     date_lst=str(data.date).split('-')
     time_lst=str(data.time).split(':')
-    mylist_data =ToDoModel.objects.filter(user=request.user,status='todo')
+    mylist_data =ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
+    task_flag_update(request.user)
     return render(request,'todoapp/update.html',{'current_user':request.user,"status":data.status,'description':data.description,'task':data.task,
         'day':int(date_lst[2]),'month':date_lst[1],'year':int(date_lst[0]),'hour':time_lst[0],'min':time_lst[1]}) 
 
@@ -153,23 +163,23 @@ def updatelist_view(request,id):
 def description_view(request,id):
     data=ToDoModel.objects.get(id=id)
     description_data=SummaryModel.objects.filter(taskId=id)
-    description=data.description
-    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo')
-    for x in description_data:
-        print(x.description_summary)
+    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
+    task_flag_update(request.user)
     return render(request,'todoapp/description.html',{"description_data":description_data,'id':id,'description':data.description,
         'current_user':request.user,'task':data.task,'time':data.time,'date':data.date,'data':mylist_data}) 
 
 def summary_view(request,id):
     data=ToDoModel.objects.get(id=id)
     summary_data=SummaryModel.objects.filter(taskId=id)
-    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo')
+    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
+    task_flag_update(request.user)
     return render(request,'todoapp/summary.html',{'summary_data':summary_data,'current_user':request.user,'data':mylist_data,'task':data.task,'id':id})
 
 def task_detail_view(request,id):
     data=ToDoModel.objects.get(id=id)
     detail_data=SummaryModel.objects.filter(taskId=id)
-    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo')
+    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
+    task_flag_update(request.user)
     return render(request,'todoapp/task_detail.html',{'detail_data':detail_data,'current_user':request.user,'data':mylist_data,'task':data.task,})
     
 

@@ -105,6 +105,25 @@ def time_format(time):
 
 
 
+def task_flag_update(user):
+    mylist_data = ToDoModel.objects.filter(user=user,status='todo',flagTask='no')
+
+    current_date=str(datetime.now().date())+datetime.now().strftime("%H:%M")
+    print(current_date)
+    for task in mylist_data:
+        tasktime=str(task.date)+task.time.strftime("%H:%M")
+        if current_date == tasktime:
+            task.flagTask = 'yes'
+            task.save()
+
+
+
+
+
+
+
+
+
 
         
 
