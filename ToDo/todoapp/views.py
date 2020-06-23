@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from todoapp.forms import SignUpForm,ResetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from todoapp.models import ToDoModel,SummaryModel
+from todoapp.models import ToDoModel,SummaryModel,GroupModel,TaskAssignModel
 from django.contrib.auth.models import User
 from django.contrib import messages
 from datetime import datetime,time
@@ -13,7 +13,7 @@ from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 
 # Create your views here.
 
-###############################################################################################################################
+######################Sign Up page function###########################################################
 
 def signup_view(request):
     form=SignUpForm()                            #####creating the object of SignUpForm class
@@ -27,7 +27,7 @@ def signup_view(request):
             return HttpResponseRedirect('/accounts/login')          ######here we redirect path '/accounts/login' url
 
     return render(request,'todoapp/signup.html',{'form':form})   ########### 'render()'  function insert the context inside template('signup.html')
-###############################################################################################################################
+############################################################################################################
 @login_required            
 def mylist_view(request,mylist_choice):
     data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
@@ -82,7 +82,7 @@ def reset_password_view(request):
 
 ##########################################################################################################################################
 
-@login_required                 #################################login_required is the decorater use to restrict the user to in that before authenticating itself
+@login_required                 #################################login_required is the decorater use to restrict the user to go in that page before authenticating itself .
 def todo_create_view(request):
     
     error = True
@@ -111,7 +111,7 @@ def todo_create_view(request):
     return render(request,'todoapp/todo_create.html',{'current_user':request.user,'data':mylist_data})
 
 
-#############################################################################################################################
+#############################This function is used to update the the task #####################################
 
 def updatelist_view(request,id):
     error=False
@@ -158,7 +158,7 @@ def updatelist_view(request,id):
         'day':int(date_lst[2]),'month':date_lst[1],'year':int(date_lst[0]),'hour':time_lst[0],'min':time_lst[1]}) 
 
 
-################################################################################################################################################################################################################################
+##################This three function are used to show log of task in short/detail#########################################################################
     
 def description_view(request,id):
     data=ToDoModel.objects.get(id=id)
@@ -183,7 +183,112 @@ def task_detail_view(request,id):
     return render(request,'todoapp/task_detail.html',{'detail_data':detail_data,'current_user':request.user,'data':mylist_data,'task':data.task,})
     
 
-############################################################################################################################################################################################################
+####################This function is used to create group#########################################################################
+
+def groupview(request):
+
+   
+    if request.method == 'POST':
+        flag = False
+        addGrp = GroupModel()
+        allGroupData = GroupModel.objects.all()
+        for data in allGroupData:
+            if data.created_by == str(request.user) and data.group == request.POST.get('group'):
+                flag = True
+
+        if flag == False:
+            addGrp.member = request.user
+            addGrp.created_by = str(request.user) 
+            addGrp.group = request.POST.get('group')
+            addGrp.save()
+
+        else:
+            messages.info(request, 'You have already created group')
+
+        
+
+    grpdata_member=GroupModel.objects.filter(member=request.user)
+    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
+    task_flag_update(request.user)
+
+
+    return render(request,'todoapp/creategroup.html',{'current_user':request.user,'grpdata_member':grpdata_member,'data':mylist_data})
+
+#####################################This function is used to add members in group#############################3
+def addMemberview(request,created_by=None,group=None,member=None):
+    flag,memberFlag,addmemberFlag = False,True,False
+
+
+    if created_by == str(request.user) :
+        addmemberFlag = True
+
+    if member != None:
+        allGroupData = GroupModel.objects.all()
+        for grpData in allGroupData:
+            if grpData.created_by == created_by and grpData.group == group and str(grpData.member) == member:
+                flag = True
+            
+        
+        if flag == False:
+                userData = User.objects.all()       
+                addMember = GroupModel()
+                addMember.created_by = created_by
+                addMember.group = group
+                for x in userData:
+                    if str(x.username) == member:
+                        addMember.member = x
+                        addMember.save()
+                        memberFlag = False
+                        break
+                if memberFlag:
+                    messages.info(request, 'No such username')
+        else:
+            messages.info(request, 'Member already exist')
+
+
+    grp_member = GroupModel.objects.filter(created_by=created_by,group=group)
+    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
+    task_flag_update(request.user)
+
+
+    return render(request, 'todoapp/addmember.html',{'current_user':request.user,'created_by':created_by,
+        'group':group,'grp_member':grp_member,'data':mylist_data,'addmemberFlag':addmemberFlag})
+
+        
+###########################Function is used to show Task Assigned to members###################################
+def taskAssignedview(request,id):
+
+    taskassigned = TaskAssignModel.objects.filter(assigned_to=id)
+    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
+    task_flag_update(request.user)
+
+    return render(request,'todoapp/taskassigned.html',{'current_user':request.user,'taskassigned':taskassigned,'data':mylist_data})
+
+######################This function is used to assign tasks to members######################################################
+def createtaskview(request,created_by,group):
+
+
+    if request.method == 'POST':
+        memberObject = GroupModel.objects.get(id=request.POST.get('member_id'))
+        task_assign = TaskAssignModel()
+        task_assign.assigned_to = memberObject
+        task_assign.task = request.POST.get('task')
+        task_assign.assigned_by = str(request.user)
+        task_assign.save()
+        messages.success(request, 'Task Assigned Successfully')
+
+
+    grp_member = GroupModel.objects.filter(created_by=created_by,group=group)
+    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
+    task_flag_update(request.user)
+
+
+    return render(request,'todoapp/createtask.html',{'current_user':request.user,'grp_member':grp_member,'data':mylist_data})
+
+#######################################################################################################################################
+
+
+
 
 
 

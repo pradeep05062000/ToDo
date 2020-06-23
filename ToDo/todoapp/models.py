@@ -6,16 +6,11 @@ from django.contrib.auth.models import User
 
 
 class ToDoModel(models.Model):
-	CHOICES=(
-		('todo','Todo'),
-		('inProgress','In progress'),
-		('done','Done')
-		)
-	user=models.ForeignKey(settings.AUTH_USER_MODEL,related_name='todolist',on_delete=models.CASCADE,null=True)
+	user=models.ForeignKey(User,related_name='todolist',on_delete=models.CASCADE,null=True)
 	task=models.CharField(max_length=60)
 	date=models.DateField()
 	time=models.TimeField()
-	status=models.CharField(max_length=60,choices=CHOICES,default='todo')
+	status=models.CharField(max_length=60,default='todo')
 	description=models.TextField(default=None)
 	flagTask = models.CharField(max_length=60,default='no')
 
@@ -27,5 +22,19 @@ class SummaryModel(models.Model):
     description_summary=models.TextField(default='None')
     modefied_detail=models.CharField(max_length=60,default=None,null =True)
     created_update=models.CharField(max_length=60,default=None,null =True)
+
+
+
+
+class GroupModel(models.Model):
+	member =  models.ForeignKey(User,on_delete=models.CASCADE,null=True)
+	group =  models.CharField(max_length=60)
+	created_by = models.CharField(max_length = 60)
+
+
+class TaskAssignModel(models.Model):
+	assigned_to = models.ForeignKey(GroupModel,on_delete=models.CASCADE,null=True)
+	task = models.CharField(max_length=60)
+	assigned_by = models.CharField(max_length = 60)
 
 

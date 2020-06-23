@@ -1,0 +1,50 @@
+
+.create_group {
+	
+	margin-top: 5%;
+	margin-left: 33%; 
+	position: relative;
+}
+
+
+.createtask_outer {
+	font-weight: bold;
+	border: 2px solid grey;
+	border-radius:15px 15px 0px 0px ;
+	padding: 10px 10px 10px 20px;
+	width: 40%;
+	margin-top: 8%;
+	margin-left: 33%; 
+	position: relative;
+
+}
+
+.createtask-btn {
+	top: 70px;
+	right: 50px;
+	color: white;
+	position: fixed;
+}
+
+
+.addmember {
+	width: 500px;
+	margin-top: 70px;
+	margin-left: 500px; 
+	position: relative;
+}
+
+.taskassigned {
+
+	margin-top: 100px;
+	margin-left: 400px; 
+	position: relative;
+
+}
+
+.bottom_border_style {
+	border-bottom: 2px solid grey; 
+	width:530px; 
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
