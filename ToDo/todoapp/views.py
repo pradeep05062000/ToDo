@@ -189,21 +189,25 @@ def groupview(request):
 
    
     if request.method == 'POST':
-        flag = False
-        addGrp = GroupModel()
-        allGroupData = GroupModel.objects.all()
-        for data in allGroupData:
-            if data.created_by == str(request.user) and data.group == request.POST.get('group'):
-                flag = True
+        for x in request.POST:
+            if x.isnumeric():
+                GroupModel.objects.get(id=x).delete() 
+        if request.POST.get('group'):   
+            flag = False
+            addGrp = GroupModel()
+            allGroupData = GroupModel.objects.all()
+            for data in allGroupData:
+                if data.created_by == str(request.user) and data.group == request.POST.get('group'):
+                    flag = True
 
-        if flag == False:
-            addGrp.member = request.user
-            addGrp.created_by = str(request.user) 
-            addGrp.group = request.POST.get('group')
-            addGrp.save()
+            if flag == False:
+                addGrp.member = request.user
+                addGrp.created_by = str(request.user) 
+                addGrp.group = request.POST.get('group')
+                addGrp.save()
 
-        else:
-            messages.info(request, 'You have already created group')
+            else:
+                messages.info(request, 'You have already created group')
 
         
 
