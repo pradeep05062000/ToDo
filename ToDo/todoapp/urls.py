@@ -9,6 +9,7 @@ urlpatterns = [
     path('group/',v1.groupview),
     path('reset/',v1.reset_password_view),
     path('accounts/profile/',v1.todo_create_view),
+    re_path(r'^group/(?P<created_by>[\w-]+)/(?P<group>[\w\s]+)/$',v1.groupview),
     re_path(r'^mylist/(?P<mylist_choice>[\w-]+)/$',v1.mylist_view),
     re_path(r'^addmember/(?P<created_by>[\w-]+)/(?P<group>[\w\s]+)/$',v1.addMemberview),
     re_path(r'^addmember/(?P<created_by>[\w-]+)/(?P<group>[\w\s]+)/((?P<member>[\w\s]+)|($))/$',v1.addMemberview),

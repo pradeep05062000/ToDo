@@ -9,6 +9,7 @@ from datetime import datetime,time
 from django.http import Http404
 from todoapp.supporting_python import task_detail_modifed,task_flag_update
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -185,7 +186,7 @@ def task_detail_view(request,id):
 
 ####################This function is used to create group#########################################################################
 
-def groupview(request):
+def groupview(request,created_by=None,group=None):
 
    
     if request.method == 'POST':
@@ -209,14 +210,63 @@ def groupview(request):
             else:
                 messages.info(request, 'You have already created group')
 
-        
-
     grpdata_member=GroupModel.objects.filter(member=request.user)
     mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
     task_flag_update(request.user)
 
+    if created_by != None and group != None:
+        lst = []
+        selectedGroup=GroupModel.objects.filter(created_by=created_by,group=group)
+        for x in selectedGroup:
+            lst.append(TaskAssignModel.objects.filter(assigned_to=x.id))
+        return render(request,'todoapp/creategroup.html',{'current_user':request.user,'created_by':created_by,'group':group,'grpdata_member':grpdata_member,'data':mylist_data,'lst':lst})
+    else:
+        lst = []
+        grpdata = GroupModel.objects.filter(member=request.user)
+        for x in grpdata:
+            created_by = x.created_by
+            group = x.group
+            break
+        selectedGroup=GroupModel.objects.filter(created_by=created_by,group=group)
+        for x in selectedGroup:
+            lst.append(TaskAssignModel.objects.filter(assigned_to=x.id))
+
+        return render(request,'todoapp/creategroup.html',{'current_user':request.user,'created_by':created_by,'group':group,'grpdata_member':grpdata_member,'data':mylist_data,'lst':lst})
+
 
     return render(request,'todoapp/creategroup.html',{'current_user':request.user,'grpdata_member':grpdata_member,'data':mylist_data})
+###################################################################################################################################
+
+def createGroupview(request):
+
+    if request.method == 'POST':
+        for x in request.POST:
+            if x.isnumeric():
+                GroupModel.objects.get(id=x).delete() 
+        if request.POST.get('group'):   
+            flag = False
+            addGrp = GroupModel()
+            allGroupData = GroupModel.objects.all()
+            for data in allGroupData:
+                if data.created_by == str(request.user) and data.group == request.POST.get('group'):
+                    flag = True
+
+            if flag == False:
+                addGrp.member = request.user
+                addGrp.created_by = str(request.user) 
+                addGrp.group = request.POST.get('group')
+                addGrp.save()
+
+            else:
+                messages.info(request, 'You have already created group')
+
+    grpdata_member=GroupModel.objects.filter(member=request.user)
+    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
+    task_flag_update(request.user)
+    return render(request,'todoapp/creategroup.html',{'current_user':request.user,'grpdata_member':grpdata_member,'data':mylist_data})
+
+
+
 
 #####################################This function is used to add members in group#############################3
 def addMemberview(request,created_by=None,group=None,member=None):
