@@ -151,12 +151,12 @@ def updatelist_view(request,id):
         
 
     data=ToDoModel.objects.get(id=id)
-    date_lst=str(data.date).split('-')
-    time_lst=str(data.time).split(':')
+    date_listAllMemberTask=str(data.date).split('-')
+    time_listAllMemberTask=str(data.time).split(':')
     mylist_data =ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
     task_flag_update(request.user)
     return render(request,'todoapp/update.html',{'current_user':request.user,"status":data.status,'description':data.description,'task':data.task,
-        'day':int(date_lst[2]),'month':date_lst[1],'year':int(date_lst[0]),'hour':time_lst[0],'min':time_lst[1]}) 
+        'day':int(date_listAllMemberTask[2]),'month':date_listAllMemberTask[1],'year':int(date_listAllMemberTask[0]),'hour':time_listAllMemberTask[0],'min':time_listAllMemberTask[1]}) 
 
 
 ##################This three function are used to show log of task in short/detail#########################################################################
@@ -186,106 +186,132 @@ def task_detail_view(request,id):
 
 ####################This function is used to create group#########################################################################
 
-def groupview(request,created_by=None,group=None):
+def groupview(request,grpid=None,member=None):
 
-   
-    if request.method == 'POST':
-        for x in request.POST:
-            if x.isnumeric():
-                GroupModel.objects.get(id=x).delete() 
-        if request.POST.get('group'):   
-            flag = False
-            addGrp = GroupModel()
-            allGroupData = GroupModel.objects.all()
-            for data in allGroupData:
-                if data.created_by == str(request.user) and data.group == request.POST.get('group'):
-                    flag = True
-
-            if flag == False:
-                addGrp.member = request.user
-                addGrp.created_by = str(request.user) 
-                addGrp.group = request.POST.get('group')
-                addGrp.save()
-
-            else:
-                messages.info(request, 'You have already created group')
-
+    listAllMemberTaskFlag,singleMemberTasksFlag = False,False
     grpdata_member=GroupModel.objects.filter(member=request.user)
     mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
     task_flag_update(request.user)
 
-    if created_by != None and group != None:
-        lst = []
-        selectedGroup=GroupModel.objects.filter(created_by=created_by,group=group)
-        for x in selectedGroup:
-            lst.append(TaskAssignModel.objects.filter(assigned_to=x.id))
-        return render(request,'todoapp/creategroup.html',{'current_user':request.user,'created_by':created_by,'group':group,'grpdata_member':grpdata_member,'data':mylist_data,'lst':lst})
-    else:
-        lst = []
+    if grpid == None:
+        listAllMemberTask = []
         grpdata = GroupModel.objects.filter(member=request.user)
         for x in grpdata:
-            created_by = x.created_by
-            group = x.group
+            grpid = x.grpid
             break
-        selectedGroup=GroupModel.objects.filter(created_by=created_by,group=group)
-        for x in selectedGroup:
-            lst.append(TaskAssignModel.objects.filter(assigned_to=x.id))
+        selectedGroups=GroupModel.objects.filter(grpid=grpid)
+        for x in selectedGroups:
+            listAllMemberTask.append(TaskAssignModel.objects.filter(assigned_to=x.id))
 
-        return render(request,'todoapp/creategroup.html',{'current_user':request.user,'created_by':created_by,'group':group,'grpdata_member':grpdata_member,'data':mylist_data,'lst':lst})
+        for x in listAllMemberTask:
+            if len(x) != 0:
+                listAllMemberTaskFlag = True
+        return render(request,'todoapp/creategroup.html',
+            {'listAllMemberTaskFlag':listAllMemberTaskFlag,'selectedGroups':selectedGroups,'current_user':request.user,
+            'grpid':grpid ,'grpdata_member':grpdata_member,'data':mylist_data,'listAllMemberTask':listAllMemberTask})
 
+    elif member == None:
+        listAllMemberTask = []
+        selectedGroups=GroupModel.objects.filter(grpid=grpid)
+        for x in selectedGroups:
+            listAllMemberTask.append(TaskAssignModel.objects.filter(assigned_to=x.id))
 
-    return render(request,'todoapp/creategroup.html',{'current_user':request.user,'grpdata_member':grpdata_member,'data':mylist_data})
+        for x in listAllMemberTask:
+            if len(x) != 0:
+                listAllMemberTaskFlag = True
+        return render(request,'todoapp/creategroup.html',
+            {'listAllMemberTaskFlag':listAllMemberTaskFlag,'selectedGroups':selectedGroups,'current_user':request.user,
+            'grpid':grpid,'grpdata_member':grpdata_member,'data':mylist_data,'listAllMemberTask':listAllMemberTask})
+    else:
+        singleMemberTasks = []
+        selectedGroups=GroupModel.objects.filter(grpid=grpid)
+        userData = User.objects.all() 
+        for x in userData:
+            if str(x.username) == member:
+                singleGroup=GroupModel.objects.filter(grpid=grpid,member=x)
+                break
+
+        for x in singleGroup:
+            singleMemberTasks.append(TaskAssignModel.objects.filter(assigned_to=x.id))
+
+        for x in singleMemberTasks:
+            if len(x) != 0:
+                singleMemberTasksFlag = True
+                break
+
+        return render(request,'todoapp/creategroup.html',
+            {'singleMemberTasksFlag':singleMemberTasksFlag,'selectedGroups':selectedGroups,'current_user':request.user,'member':member,'grpid':grpid,
+            'grpdata_member':grpdata_member,'data':mylist_data,'singleMemberTasks':singleMemberTasks})
+    
+
+        
 ###################################################################################################################################
 
 def createGroupview(request):
 
+    listAllMemberTaskFlag = False
+
     if request.method == 'POST':
-        for x in request.POST:
-            if x.isnumeric():
-                GroupModel.objects.get(id=x).delete() 
-        if request.POST.get('group'):   
-            flag = False
+        if len(request.POST.get('group')) >= 2:
             addGrp = GroupModel()
-            allGroupData = GroupModel.objects.all()
-            for data in allGroupData:
-                if data.created_by == str(request.user) and data.group == request.POST.get('group'):
-                    flag = True
+            addGrp.member = request.user
+            addGrp.created_by = str(request.user) 
+            addGrp.group = request.POST.get('group')
+            addGrp.save()
+            gid = GroupModel.objects.get(id=addGrp.id)
+            gid.grpid = str(gid.id) + gid.group[0:2]
+            gid.save()
 
-            if flag == False:
-                addGrp.member = request.user
-                addGrp.created_by = str(request.user) 
-                addGrp.group = request.POST.get('group')
-                addGrp.save()
-
-            else:
-                messages.info(request, 'You have already created group')
-
-    grpdata_member=GroupModel.objects.filter(member=request.user)
-    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
-    task_flag_update(request.user)
-    return render(request,'todoapp/creategroup.html',{'current_user':request.user,'grpdata_member':grpdata_member,'data':mylist_data})
+        else:
+            messages.info(request, 'Group name must contain atleast 2 characters')
 
 
+        listAllMemberTask = []
+        grpdata = GroupModel.objects.filter(member=request.user)
+        for x in grpdata:
+            grpid = x.grpid
+            break
+        selectedGroups=GroupModel.objects.filter(grpid=grpid)
+        for x in selectedGroups:
+            listAllMemberTask.append(TaskAssignModel.objects.filter(assigned_to=x.id))
+
+        for x in listAllMemberTask:
+            if len(x) != 0:
+                listAllMemberTaskFlag = True
+        
+        grpdata_member=GroupModel.objects.filter(member=request.user)
+        mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
+        task_flag_update(request.user)
+
+        return render(request,'todoapp/creategroup.html',
+            {'listAllMemberTaskFlag':listAllMemberTaskFlag,'selectedGroups':selectedGroups,'current_user':request.user,
+            'grpid':grpid ,'grpdata_member':grpdata_member,'data':mylist_data,'listAllMemberTask':listAllMemberTask})
 
 
 #####################################This function is used to add members in group#############################3
-def addMemberview(request,created_by=None,group=None,member=None):
-    flag,memberFlag,addmemberFlag = False,True,False
+def addMemberview(request,grpid=None,member=None):
+    flag,memberFlag = False,True
 
 
-    if created_by == str(request.user) :
-        addmemberFlag = True
 
     if member != None:
-        allGroupData = GroupModel.objects.all()
+
+        allGroupData = GroupModel.objects.filter(grpid=grpid)
         for grpData in allGroupData:
-            if grpData.created_by == created_by and grpData.group == group and str(grpData.member) == member:
+            if grpid == grpid and str(grpData.member) == member:
                 flag = True
             
         
         if flag == False:
-                userData = User.objects.all()       
+                userData = User.objects.all()   
+                grpAddMember = GroupModel.objects.filter(grpid=grpid) 
+                for x in grpAddMember:
+                    created_by = x.created_by
+                    group = x.group
+                    break
+
                 addMember = GroupModel()
+                addMember.grpid = grpid
                 addMember.created_by = created_by
                 addMember.group = group
                 for x in userData:
@@ -300,13 +326,12 @@ def addMemberview(request,created_by=None,group=None,member=None):
             messages.info(request, 'Member already exist')
 
 
-    grp_member = GroupModel.objects.filter(created_by=created_by,group=group)
     mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
     task_flag_update(request.user)
 
 
-    return render(request, 'todoapp/addmember.html',{'current_user':request.user,'created_by':created_by,
-        'group':group,'grp_member':grp_member,'data':mylist_data,'addmemberFlag':addmemberFlag})
+    return render(request, 'todoapp/addmember.html',
+        {'current_user':request.user,'grpid':grpid,'data':mylist_data})
 
         
 ###########################Function is used to show Task Assigned to members###################################
@@ -319,7 +344,7 @@ def taskAssignedview(request,id):
     return render(request,'todoapp/taskassigned.html',{'current_user':request.user,'taskassigned':taskassigned,'data':mylist_data})
 
 ######################This function is used to assign tasks to members######################################################
-def createtaskview(request,created_by,group):
+def createtaskview(request,grpid):
 
 
     if request.method == 'POST':
@@ -332,7 +357,7 @@ def createtaskview(request,created_by,group):
         messages.success(request, 'Task Assigned Successfully')
 
 
-    grp_member = GroupModel.objects.filter(created_by=created_by,group=group)
+    grp_member = GroupModel.objects.filter(grpid=grpid)
     mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
     task_flag_update(request.user)
 

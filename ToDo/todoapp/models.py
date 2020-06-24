@@ -27,6 +27,7 @@ class SummaryModel(models.Model):
 
 
 class GroupModel(models.Model):
+	grpid = models.CharField(max_length = 60)
 	member =  models.ForeignKey(User,on_delete=models.CASCADE,null=True)
 	group =  models.CharField(max_length=60)
 	created_by = models.CharField(max_length = 60)

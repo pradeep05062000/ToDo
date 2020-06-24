@@ -7,38 +7,11 @@
 
 
 <div class="addmember">
-
-		{% if addmemberFlag %}
 		<h3>Add Member</h3>
 		<label>Username</label>
 		<input type="text"  id = "member" name="assigned_to" required>
-		<a href="" onclick="this.href='/addmember/{{created_by}}/{{group}}/'+ document.getElementById('member').value" class = "btn btn-primary btn-sm">Add</a>
-
-			<div style="border-bottom: 2px solid grey; width:400px; "></div>
-		{% endif %}
-		<div>	
-		{% if grp_member %}
-		<table class="table" style="width: 40%;"> 
-				<tr>
-					<th>
-					Members
-					</th>
-					
-				</tr>
-				
-			{% for data in grp_member %}
-			
-				<tr>
-					<td>
-					<a href="/taskassigned/{{data.id}}">{{data.member}}</a>
-					</td>
-				</tr>
-				
-			{% endfor %}
-		</table>
-		{%else%}
-			<h3>No member</h3>
-		{% endif %}
+		<a href="" onclick="this.href='/addmember/{{grpid}}/'+ document.getElementById('member').value" class = "btn btn-primary btn-sm">Add</a>
+<div>	
 	</div>
 	{% if messages %}
         {% for message in messages %}
@@ -49,12 +22,6 @@
   {% endif %}
 
 </div>
-<div class="createtask-btn">
-	
-	<a href="/createtask/{{created_by}}/{{group}}/" class="btn btn-primary">Create Task&nbsp<i class="fa fa-plus"></i></a>
-	
-	</div>
-
 
 <script >
   function testfunction(){

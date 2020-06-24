@@ -1,8 +1,8 @@
 
 .create_group {
 	
-	margin-top: 5%;
-	margin-left: 33%; 
+	margin-top: 0px;
+	margin-left: 400px; 
 	position: relative;
 }
 
@@ -15,6 +15,22 @@
 
 #select-group {
 	width: 200px;
+}
+#select-member {
+	width: 200px;
+}
+
+.addmember-btn {
+	top:80px;
+	right: 10px;
+	position: absolute;
+}
+.fixed-top-2 {
+    margin-top: 56px;
+}
+
+.sticky-top {
+    padding-top: 56px;
 }
 
 .createtask_outer {

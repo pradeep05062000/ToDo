@@ -3,46 +3,71 @@
 
 {% block body_block %}
 {{ block.super }}
+<div class="sticky-top">
+	
+    <nav class="navbar navbar-expand-sm navbar-light bg-light ">
+    	<div class="container">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar2">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="navbar2">
+            <ul class="navbar-nav">
+                <li class="nav-item ">
+                    {% if grpdata_member %}	
+						<select class="form-control" id ="select-group" onchange="window.location.href=this.value">
+							{% for data in grpdata_member %}
+						    <option value="/group/{{data.grpid}}">{{data.grpid}}/{{data.group}}</option>
+						    {% endfor %}
+						</select>
+					{% endif %}
+                </li>&nbsp&nbsp&nbsp
+                <li class="nav-item">
+                   {% if selectedGroups %}	
+						<select class="form-control" id ="select-member" onchange="window.location.href=this.value">
+							<option value="/group/{{grpid}}"  selected>All members</option>
+							{% for data in selectedGroups %}
+						    <option value="/group/{{data.grpid}}/{{data.member}}">{{data.member}}</option>
+						    {% endfor %}
+						</select>
+					{% endif %}
+                </li>&nbsp&nbsp&nbsp
+                <li class="nav-item" style="padding-top: 4px;">
+                	{%if grpid%}
+					<a href="/createtask/{{grpid}}/" class="btn btn-primary btn-sm">Create Task&nbsp<i class="fa fa-plus"></i></a>
+                	{%endif%}
+				</li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+            	<li class="nav-item">
+            		{%if grpid%}
+            		<a href="/addmember/{{grpid}}" class="btn btn-primary btn-sm" >Add member</a>
+            		{% endif %}
+            	</li>
+            </ul>
+        </div>
+        </div>
+    </nav>
+</div><br>
 
-
+	
 	<div class="create_group">
 		<h3>Create Group</h3>
-	<form method="post">
+	<form method="post" action="/createGroup/">
 		{% csrf_token %}
 		<label>Group Name</label>
 		<input type="text" name="group" required>
 		<input type="submit" value="Create" class="btn btn-primary btn-sm">
 	</form>
-	</div>
-	<hr>
-	<div class="selectGroup">
-		{% if grpdata_member %}	
-
-			<select class="form-control" id ="select-group" onchange="window.location.href=this.value">
-				{% for data in grpdata_member %}
-			    <option value="/group/{{data.created_by}}/{{data.group}}">{{data.group}}</option>
-			    {% endfor %}
-			</select>
-		{% endif %}
-	</div>
-	<div >
-		{% if grpdata_member %}	
-
-			<select class="form-control" id ="select-group" onchange="window.location.href=this.value">
-				{% for data in grpdata_member %}
-			    <option value="/group/{{data.created_by}}/{{data.group}}">{{data.group}}</option>
-			    {% endfor %}
-			</select>
-		{% endif %}
-	</div>
+	</div><br>
+	
 	<div>
-		{% if lst %}
+		{% if listAllMemberTaskFlag  %}
 			<table class="table">
 				<tr>
 					<th>Task</th>
 					<th>Assigned By</th>
 				</tr>
-				{% for i in lst %}
+				{% for i in listAllMemberTask %}
 				{% for j in i %}
 				<tr>
 					<td>
@@ -55,15 +80,48 @@
 				{% endfor %}
 				{% endfor %}
 			</table>
+	</div>
+	<div>
+		{% elif singleMemberTasksFlag %}
+			<table class="table">
+				<tr>
+					<th>Task</th>
+					<th>Assigned By </th>
+				</tr>
+				{% for i in singleMemberTasks %}
+				{% for j in i %}
+				<tr>
+					<td>
+						{{j.task}}
+					</td>
+					<td>
+						{{j.assigned_by}}
+					</td>
+				</tr>
+				{% endfor %}
+				{% endfor %}
+			</table>
+			{%else%}
+				<h3>No Task Found </h3>
 		{% endif %}
 	</div>
 
 	<script >
-		function groupSelect(val1,val2) {
-			console.log(val1,val2)
-          document.getElementById("select-group").value = "/group/"+val1+"/"+val2;
+		function groupSelect(val1) {
+          document.getElementById("select-group").value = "/group/"+val1;
         }
-        groupSelect('{{created_by}}','{{group}}');
+        function memberSelect(val1,val2) {
+			if(val2 != '') {
+				console.log("val2")
+          document.getElementById("select-member").value = "/group/"+val1+"/"+val2;
+      }
+      		else
+      		document.getElementById("select-member").value = "/group/"+val1;
+
+
+        }
+        groupSelect('{{grpid}}');
+        memberSelect('{{grpid}}','{{member}}');
 	</script>
 
 	{% if messages %}
