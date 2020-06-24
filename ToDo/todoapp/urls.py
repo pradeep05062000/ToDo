@@ -17,9 +17,11 @@ urlpatterns = [
     re_path(r'^addmember/(?P<grpid>[\w\s]+)/(?P<member>[\w\s]+)/$',v1.addMemberview),
     re_path(r'^taskassigned/(?P<id>[\d]+)/$',v1.taskAssignedview),
     re_path(r'^createtask/(?P<grpid>[\w\s]+)/$',v1.createtaskview),
+    re_path(r'updateAssignedTask/(?P<id>[\d]+)/(?P<grpid>[\w\s]+)/$',v1.updateAssignedTaskView),
     re_path(r'(?P<id>[\d]+)/description',v1.description_view),
     re_path(r'(?P<id>[\d]+)/summary',v1.summary_view),
     re_path(r'(?P<id>[\d]+)/detail',v1.task_detail_view),
     re_path(r'(?P<id>[\d]+)/update',v1.updatelist_view),
+
 ]
 	

@@ -75,7 +75,7 @@
 						{{j.assigned_to_name}}
 					</td>
 					<td>
-						{{j.task}}
+						<a href="/updateAssignedTask/{{j.id}}/{{grpid}}">{{j.task}}</a>
 					</td>
 					<td>
 						{{j.assigned_by}}
@@ -96,7 +96,7 @@
 				{% for j in i %}
 				<tr>
 					<td>
-						{{j.task}}
+						<a href="/updateAssignedTask/{{j.id}}/{{grpid}}">{{j.task}}</a>
 					</td>
 					<td>
 						{{j.assigned_by}}

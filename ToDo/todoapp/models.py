@@ -37,6 +37,15 @@ class TaskAssignModel(models.Model):
 	assigned_to_id = models.ForeignKey(GroupModel,on_delete=models.CASCADE,null=True)
 	assigned_to_name = models.CharField(max_length=60)
 	task = models.CharField(max_length=60)
+	status=models.CharField(max_length=60,default='todo')
+	comment=models.TextField(default=None)
 	assigned_by = models.CharField(max_length = 60)
+
+
+class GroupTaskActivityModel(models.Model):
+	grpTaskActivity_id = models.ForeignKey(TaskAssignModel,on_delete=models.CASCADE,null=True)
+	activity = models.TextField(default='None')
+	dateTime=models.DateTimeField(blank=True,default=None)
+	updated_by=models.CharField(max_length=60)
 
 

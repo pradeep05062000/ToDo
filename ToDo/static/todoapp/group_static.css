@@ -45,6 +45,43 @@
 
 }
 
+.updatetask_outer {
+	border-left: 2px solid grey;
+	padding-left: 10px;
+	height: 550px;
+	top:55px;
+	right:5px;
+	position: absolute;
+}
+
+ .updatetask {
+	top: 10px;
+	width: 300px;
+	position: relative;
+}
+
+.task-detail {
+	top:100px;
+	width: 700px;
+	left: 200px;
+	position: absolute;
+}
+.comment-details {
+	top:300px;
+	width: 700px;
+	margin-left: 200px;
+	position: absolute;
+}
+#activity-updated-by {
+	font-weight: bold;
+}
+#activity-date {
+	font-weight: normal;
+	font-family: "Lucida Console", Courier, monospace;
+	padding-left: 10px;
+
+}
+
 .createtask-btn {
 	top: 70px;
 	right: 50px;
