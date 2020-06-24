@@ -14,7 +14,7 @@ class GroupAdmin(admin.ModelAdmin):
 	list_display = ['id','grpid','member','group','created_by']
 
 class TaskAssignAdmin(admin.ModelAdmin):
-	list_display = ['assigned_to','task','assigned_by']
+	list_display = ['assigned_to_id','assigned_to_name','task','assigned_by']
 
 
 

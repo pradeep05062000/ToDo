@@ -16,7 +16,7 @@
                     {% if grpdata_member %}	
 						<select class="form-control" id ="select-group" onchange="window.location.href=this.value">
 							{% for data in grpdata_member %}
-						    <option value="/group/{{data.grpid}}">{{data.grpid}}/{{data.group}}</option>
+						    <option value="/group/{{data.grpid}}">{{data.group}}</option>
 						    {% endfor %}
 						</select>
 					{% endif %}
@@ -64,12 +64,16 @@
 		{% if listAllMemberTaskFlag  %}
 			<table class="table">
 				<tr>
+					<th>Assigned To</th>
 					<th>Task</th>
 					<th>Assigned By</th>
 				</tr>
 				{% for i in listAllMemberTask %}
 				{% for j in i %}
 				<tr>
+					<td>
+						{{j.assigned_to_name}}
+					</td>
 					<td>
 						{{j.task}}
 					</td>

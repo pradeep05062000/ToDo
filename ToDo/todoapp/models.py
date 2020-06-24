@@ -34,7 +34,8 @@ class GroupModel(models.Model):
 
 
 class TaskAssignModel(models.Model):
-	assigned_to = models.ForeignKey(GroupModel,on_delete=models.CASCADE,null=True)
+	assigned_to_id = models.ForeignKey(GroupModel,on_delete=models.CASCADE,null=True)
+	assigned_to_name = models.CharField(max_length=60)
 	task = models.CharField(max_length=60)
 	assigned_by = models.CharField(max_length = 60)
 

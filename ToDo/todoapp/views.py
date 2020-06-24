@@ -201,7 +201,7 @@ def groupview(request,grpid=None,member=None):
             break
         selectedGroups=GroupModel.objects.filter(grpid=grpid)
         for x in selectedGroups:
-            listAllMemberTask.append(TaskAssignModel.objects.filter(assigned_to=x.id))
+            listAllMemberTask.append(TaskAssignModel.objects.filter(assigned_to_id=x.id))
 
         for x in listAllMemberTask:
             if len(x) != 0:
@@ -214,7 +214,7 @@ def groupview(request,grpid=None,member=None):
         listAllMemberTask = []
         selectedGroups=GroupModel.objects.filter(grpid=grpid)
         for x in selectedGroups:
-            listAllMemberTask.append(TaskAssignModel.objects.filter(assigned_to=x.id))
+            listAllMemberTask.append(TaskAssignModel.objects.filter(assigned_to_id=x.id))
 
         for x in listAllMemberTask:
             if len(x) != 0:
@@ -232,7 +232,7 @@ def groupview(request,grpid=None,member=None):
                 break
 
         for x in singleGroup:
-            singleMemberTasks.append(TaskAssignModel.objects.filter(assigned_to=x.id))
+            singleMemberTasks.append(TaskAssignModel.objects.filter(assigned_to_id=x.id))
 
         for x in singleMemberTasks:
             if len(x) != 0:
@@ -273,7 +273,7 @@ def createGroupview(request):
             break
         selectedGroups=GroupModel.objects.filter(grpid=grpid)
         for x in selectedGroups:
-            listAllMemberTask.append(TaskAssignModel.objects.filter(assigned_to=x.id))
+            listAllMemberTask.append(TaskAssignModel.objects.filter(assigned_to_id=x.id))
 
         for x in listAllMemberTask:
             if len(x) != 0:
@@ -337,7 +337,7 @@ def addMemberview(request,grpid=None,member=None):
 ###########################Function is used to show Task Assigned to members###################################
 def taskAssignedview(request,id):
 
-    taskassigned = TaskAssignModel.objects.filter(assigned_to=id)
+    taskassigned = TaskAssignModel.objects.filter(assigned_to_id=id)
     mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
     task_flag_update(request.user)
 
@@ -350,7 +350,8 @@ def createtaskview(request,grpid):
     if request.method == 'POST':
         memberObject = GroupModel.objects.get(id=request.POST.get('member_id'))
         task_assign = TaskAssignModel()
-        task_assign.assigned_to = memberObject
+        task_assign.assigned_to_id = memberObject
+        task_assign.assigned_to_name = memberObject.member
         task_assign.task = request.POST.get('task')
         task_assign.assigned_by = str(request.user)
         task_assign.save()
