@@ -120,31 +120,24 @@ def task_flag_update(user):
 
 ###################################Function to check group task comment is changed or not ########################################################
 
-def activityCheck(recentComment,recentTask,recentStatus,memberId,id):
+def historyCheck(recentComment,recentTask,recentStatus,memberId,id):
     oldData = TaskAssignModel.objects.get(id=id)
-    ct,tk,ss,mid,flagCt,flagTk,flagSs,flagMid = False,False,False,False,False,False,False,False
+    ct,tk,ss,mid,flag=False,False,False,False,False
 
-    print(type(oldData.assigned_to_id_id),type(memberId))
 
     if oldData.comment != recentComment :
-        flagCt = True
+        flag = True
         ct = 'Comment:'+ recentComment + '\n'
 
     if oldData.task != recentTask:
-        flagTk = True
         tk = 'Task:' + recentTask + '\n'
 
     if oldData.status != recentStatus:
-        flagSs = True
         ss = 'Status:' + recentStatus + '\n'
 
     if oldData.assigned_to_id_id != int(memberId):
-        flagMid = True
         member=GroupModel.objects.get(id=memberId)
         mid = 'Assigned To:' + str(member.member) + '\n'
-
-
-    flag = [str(flagCt) , str(flagTk) , str(flagSs) , str(flagMid)]      
 
 
 
@@ -207,7 +200,6 @@ def verifyGroupAdmin(user):
 
 
     for data in adminUsersData:
-
         if data.adminUser == user:
             return True
 

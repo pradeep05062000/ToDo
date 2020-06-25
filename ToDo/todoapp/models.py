@@ -44,12 +44,13 @@ class TaskAssignModel(models.Model):
 
 class GroupTaskActivityModel(models.Model):
 	grpTaskActivity_id = models.ForeignKey(TaskAssignModel,on_delete=models.CASCADE,null=True)
-	activity = models.TextField(default='None')
+	comments = models.TextField(default='None')
+	history = models.TextField(default='None')
 	dateTime=models.DateTimeField(blank=True,default=None)
 	updated_by=models.CharField(max_length=60)
 
 
-class GroupAdminsModel(model.Model):
+class GroupAdminsModel(models.Model):
 	adminUser_id = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
 	adminUser = models.CharField(max_length=60)
 

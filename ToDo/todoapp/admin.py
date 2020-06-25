@@ -18,7 +18,7 @@ class TaskAssignAdmin(admin.ModelAdmin):
 
 
 class GroupTaskActivityAdmin(admin.ModelAdmin):
-	list_display = ['grpTaskActivity_id','activity','dateTime','updated_by']
+	list_display = ['grpTaskActivity_id','comments','history','dateTime','updated_by']
 
 class GroupAdminsAdmin(admin.ModelAdmin):
 	list_display = ['adminUser_id','adminUser']

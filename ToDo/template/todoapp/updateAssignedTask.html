@@ -6,8 +6,8 @@
 
 <div class="updatetask_outer" >
 	<div class="updatetask">
-	<h3>Assign Tasks</h3>
-	<form method="post">
+	<h3>Update Tasks</h3>
+	<form method="post" action='/updateAssignedTask/{{id}}/{{grpid}}/'>
 		{% csrf_token %}
 
 		<label>Task</label>
@@ -15,9 +15,9 @@
 
     <label>Status</label>
      <select class="form-control" id="grp-staus-select"  name="status">
-          <option value="todo" >ToDo</option>
-          <option value="inProgress" >In progress</option>
-          <option value="done" >Done</option>
+          <option value="ToDo" >ToDo</option>
+          <option value="In Progress" >In Progress</option>
+          <option value="Done" >Done</option>
     </select><br>                     
 
 		<label>Assign to</label>
@@ -57,13 +57,28 @@
 
 <div class="comment-details">
        <h4>Activity</h4>
+       show:&nbsp<a href="/updateAssignedTask/{{id}}/{{grpid}}/Comments" class="btn btn-primary btn-sm">Comments</a>
+      <a href="/updateAssignedTask/{{id}}/{{grpid}}/History" class='btn btn-primary btn-sm'>History</a>
        <hr>
+       {% if historyFlag %}
         {% for data in delailedActivity %}
           <div style="border-left:5px solid black; border-bottom:1px solid grey">
-          <p id ="activity-updated-by">{{data.updated_by | title}}<span id="activity-date">{{data.dateTime}}</span></p>
-          {{data.activity|linebreaks}}         
+          <p id ="activity-updated-by">{{data.updated_by}}<span id="activity-date">{{data.dateTime}}</span></p>
+          {{data.history|linebreaks}}         
           </div>
+        {% endfor %}
+      {% else %}
+        {% for data in delailedActivity %}
+          {% if data.comments != 'None' %}
+          <div style="border-left:5px solid black; border-bottom:1px solid grey">
+          <p id ="activity-updated-by">{{data.updated_by}}<span id="activity-date">{{data.dateTime}}</span></p>
+          {{data.comments}}         
+          </div>
+          {% endif %}
         {% endfor %} 
+
+      {% endif %}
+      <br><br>
 </div>
 
   <script>

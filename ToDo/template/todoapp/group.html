@@ -33,7 +33,7 @@
                 </li>&nbsp&nbsp&nbsp
                 <li class="nav-item" style="padding-top: 4px;">
                 	{%if grpid%}
-					<a href="/createtask/{{grpid}}/" class="btn btn-primary btn-sm">Create Task&nbsp<i class="fa fa-plus"></i></a>
+					<a href="" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createtaskmodalform">Create Task&nbsp<i class="fa fa-plus"></i></a>
                 	{%endif%}
 				</li>
             </ul>
@@ -41,15 +41,14 @@
             	<li class="nav-item">
             		{% if verifyUserFlag %}
             		{%if grpid%}
-            		<a href="/addmember/{{grpid}}" class="btn btn-primary btn-sm" >Add member</a>
+            		<a href=" " class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addmembermodalform">Add member</a>
             		{% endif %}
             		{% endif %}
-            	</li>
+            	</li>&nbsp&nbsp&nbsp
             	<li class="nav-item">
             		{% if verifyUserFlag %}
             		<a href="/createGroup" class="btn btn-primary btn-sm" >Edit Group</a>
             		{% endif %}
-            	</li>
             </ul>
         </div>
         </div>
@@ -57,17 +56,11 @@
 </div><br>
 
 	
-	<div class="create_group">
-		<h3>Create Group</h3>
-	<form method="post" action="/createGroup/">
-		{% csrf_token %}
-		<label>Group Name</label>
-		<input type="text" name="group" required>
-		<input type="submit" value="Create" class="btn btn-primary btn-sm">
-	</form>
-	</div><br>
 	
 	<div>
+		{% if not grpid %}
+		<h3>You don't have any group</h3>
+		{% endif %}
 		{% if listAllMemberTaskFlag  %}
 			<table class="table">
 				<tr>
@@ -91,6 +84,7 @@
 				{% endfor %}
 				{% endfor %}
 			</table>
+		
 	</div>
 	<div>
 		{% elif singleMemberTasksFlag %}
@@ -112,10 +106,91 @@
 				{% endfor %}
 				{% endfor %}
 			</table>
-			{%else%}
-				<h3>No Task Found </h3>
 		{% endif %}
 	</div>
+
+
+
+
+<div class="container my-4">
+
+    <div class="modal fade" id="addmembermodalform" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Add Member</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+       <label data-error="wrong" data-success="right" for="form3">Username</label>
+          <input type="text" id="member" class="form-control validate">
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <a href="" onclick="this.href='/addmember/{{grpid}}/'+ document.getElementById('member').value" class = "btn btn-primary btn-sm">Add</a>
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+
+
+
+
+
+<div class="container my-4">
+
+    <div class="modal fade" id="createtaskmodalform" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Assign Task</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" action="/createtask/{{grpid}}/">
+		{% csrf_token %}
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+       <label data-error="wrong" data-success="right" for="form1">Task</label>
+          <input type="text" id="form1" name="task" class="form-control validate" required>
+        </div>
+        <div class="md-form mb-5">
+       <label data-error="wrong" data-success="right" for="form2">Assign to</label>
+          <select name="member_id" class="form-control validate" required>
+            <option value="" disabled selected>Select Member</option>
+            {% for data in selectedGroups %}
+            <option value="{{data.id}}">{{data.member}}</option>
+            {% endfor%}
+    	</select>
+        </div>
+        <div class="md-form mb-5">
+       <label data-error="wrong" data-success="right" for="form3">Comment</label>
+           <textarea class="form-control validate" name="comment"  required></textarea>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <input type="submit"  value="Assign" class="btn btn-primary btn-sm">
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+  </div>
+
+
+
+
+
+
 
 	<script >
 		function groupSelect(val1) {
