@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+{% extends "todoapp/base2.html" %}
+
+{% block body_block %}
+{{ block.super }}
+	
+	<div class="create_group">
+		<h3>Create Group</h3>
+	<form method="post">
+		{% csrf_token %}
+		<label>Group Name</label>
+		<input type="text" name="group" required>
+		<input type="submit" value="Create" class="btn btn-primary btn-sm">
+	</form>
+	<div class="bottom_border_style"></div>
+	<div>
+		{% if grpdata_member %}	
+		<form method="post">
+             {%csrf_token%}
+		<table class="table table-bordered sortable" id="myTable" style="width: 60%;">
+				<tr>
+					<th style="width: 110px">
+			          <input type="checkbox" id="selecttodo" onclick="selectAll(this,document.getElementsByClassName('flag_group'))"><span style="padding-left:5px;">
+			          	<input type="submit" name="submit" class="btn btn-danger btn-sm" value="Delete">
+			          </span>
+			        </th>
+					<th class ="grpSort">Group</th>
+					<th class ="created" >created By</th>
+				</tr>
+
+			{% for data in grpdata_member %}
+			
+				<tr>
+					<td><input type="checkbox" class="flag_group"  name="{{data.id}}">
+
+					<td class="group">
+					<a href="/addmember/{{data.created_by}}/{{data.group}}">{{data.group}}</a>
+					</td>
+					<td class="admins" >
+						{{data.created_by}}
+					</td>
+				</tr>
+				
+			{% endfor %}
+		</table>
+		 </form>
+		{%else%}
+			<h3> No Groups</h3>
+		{% endif %}
+	</div>
+<script >
+  function testfunction(){
+
+      console.log("hello");
+    var data1 = [
+        {%for data2 in data%}
+          "{{data2.date}}","{{data2.time}}",
+        {%endfor%}
+      ];
+    var task = [
+        {%for data2 in data%}
+          "{{data2.task}}",
+        {%endfor%}
+      ];
+
+      var timearr =[];
+    var i;
+  for(i=0;i<(data1.length)-1;){
+        timearr[timearr.length]=data1[i]+data1[i+1];
+        i +=2;
+      }
+
+      var alarmInfo = {};
+    
+      for (let i =0; i < timearr.length; i++) {
+        alarmInfo[timearr[i]+task[i]] = 'no';
+      }
+      
+      setInterval(function(){logical(timearr,alarmInfo,task);}, 1000);  
+
+  }
+</script>
+
+
+
+{%endblock%}
