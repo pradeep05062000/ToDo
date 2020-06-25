@@ -39,8 +39,15 @@
             </ul>
             <ul class="navbar-nav ml-auto">
             	<li class="nav-item">
+            		{% if verifyUserFlag %}
             		{%if grpid%}
             		<a href="/addmember/{{grpid}}" class="btn btn-primary btn-sm" >Add member</a>
+            		{% endif %}
+            		{% endif %}
+            	</li>
+            	<li class="nav-item">
+            		{% if verifyUserFlag %}
+            		<a href="/createGroup" class="btn btn-primary btn-sm" >Edit Group</a>
             		{% endif %}
             	</li>
             </ul>

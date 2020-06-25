@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from datetime import datetime,time
 from django.http import Http404
-from todoapp.supporting_python import task_detail_modifed,task_flag_update,activityCheck
+from todoapp.supporting_python import task_detail_modifed,task_flag_update,activityCheck,verifyGroupAdmin
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.http import JsonResponse
 
@@ -240,7 +240,7 @@ def groupview(request,grpid=None,member=None):
                 singleMemberTasksFlag = True
                 break
 
-        return render(request,'todoapp/creategroup.html',
+        return render(request,'todoapp/group.html',
             {'singleMemberTasksFlag':singleMemberTasksFlag,'selectedGroups':selectedGroups,'current_user':request.user,'member':member,'grpid':grpid,
             'grpdata_member':grpdata_member,'data':mylist_data,'singleMemberTasks':singleMemberTasks})
     
@@ -251,6 +251,7 @@ def groupview(request,grpid=None,member=None):
 def createGroupview(request):
 
     listAllMemberTaskFlag = False
+    verifyUserFlag = verifyGroupAdmin(str(request.user))
 
     if request.method == 'POST':
         if len(request.POST.get('group')) >= 2:
@@ -297,7 +298,7 @@ def createGroupview(request):
         task_flag_update(request.user)
 
         return render(request,'todoapp/creategroup.html',
-            {'listAllMemberTaskFlag':listAllMemberTaskFlag,'selectedGroups':selectedGroups,'current_user':request.user,
+            {'listAllMemberTaskFlag':listAllMemberTaskFlag,'selectedGroups':selectedGroups,'current_user':request.user,'verifyUserFlag':verifyUserFlag,
             'grpid':grpid ,'grpdata_member':grpdata_member,'data':mylist_data,'listAllMemberTask':listAllMemberTask})
 
 

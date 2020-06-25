@@ -1,5 +1,5 @@
 from datetime import datetime,time
-from todoapp.models import ToDoModel,TaskAssignModel,GroupModel
+from todoapp.models import ToDoModel,TaskAssignModel,GroupModel,GroupAdminsModel
 
 
 #################This function is used to check date and time is updated or not after submitting update form#####################
@@ -195,6 +195,25 @@ def activityCheck(recentComment,recentTask,recentStatus,memberId,id):
 
     else:
         return False, flag
+
+
+
+
+#######################################################################################################################
+
+def verifyGroupAdmin(user):
+
+    adminUsersData = GroupAdminsModel.objects.all()
+
+
+    for data in adminUsersData:
+
+        if data.adminUser == user:
+            return True
+
+        else:
+            return False
+
 
 
 

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from todoapp.models import ToDoModel,SummaryModel,GroupModel,TaskAssignModel,GroupTaskActivityModel
+from todoapp.models import ToDoModel,SummaryModel,GroupModel,TaskAssignModel,GroupTaskActivityModel,GroupAdminsModel
 # Register your models here.
 
 class ToDoAdmin(admin.ModelAdmin):
@@ -20,6 +20,9 @@ class TaskAssignAdmin(admin.ModelAdmin):
 class GroupTaskActivityAdmin(admin.ModelAdmin):
 	list_display = ['grpTaskActivity_id','activity','dateTime','updated_by']
 
+class GroupAdminsAdmin(admin.ModelAdmin):
+	list_display = ['adminUser_id','adminUser']
+
 
 admin.site.register(GroupModel,GroupAdmin)
 
@@ -30,3 +33,5 @@ admin.site.register(GroupTaskActivityModel,GroupTaskActivityAdmin)
 admin.site.register(ToDoModel,ToDoAdmin)
 
 admin.site.register(SummaryModel,SummaryAdmin)
+
+admin.site.register(GroupAdminsModel,GroupAdminsAdmin)

@@ -49,3 +49,8 @@ class GroupTaskActivityModel(models.Model):
 	updated_by=models.CharField(max_length=60)
 
 
+class GroupAdminsModel(model.Model):
+	adminUser_id = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
+	adminUser = models.CharField(max_length=60)
+
+
