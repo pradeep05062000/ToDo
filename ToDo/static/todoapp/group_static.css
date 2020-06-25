@@ -1,11 +1,37 @@
 
 .create_group {
 	
-	margin-top: 5%;
-	margin-left: 33%; 
+	margin-top: 100px;
+	margin-left: 400px; 
 	position: relative;
 }
 
+.selectGroup {
+	top:80px;
+	left: 30px;
+	position: absolute;
+}
+
+
+#select-group {
+	width: 200px;
+}
+#select-member {
+	width: 200px;
+}
+
+.addmember-btn {
+	top:80px;
+	right: 10px;
+	position: absolute;
+}
+.fixed-top-2 {
+    margin-top: 56px;
+}
+
+.sticky-top {
+    padding-top: 56px;
+}
 
 .createtask_outer {
 	font-weight: bold;
@@ -16,6 +42,43 @@
 	margin-top: 8%;
 	margin-left: 33%; 
 	position: relative;
+
+}
+
+.updatetask_outer {
+	border-left: 2px solid grey;
+	padding-left: 10px;
+	height: 550px;
+	top:55px;
+	right:5px;
+	position: absolute;
+}
+
+ .updatetask {
+	top: 10px;
+	width: 300px;
+	position: relative;
+}
+
+.task-detail {
+	top:100px;
+	width: 700px;
+	left: 200px;
+	position: absolute;
+}
+.comment-details {
+	top:300px;
+	width: 700px;
+	margin-left: 200px;
+	position: absolute;
+}
+#activity-updated-by {
+	font-weight: bold;
+}
+#activity-date {
+	font-weight: normal;
+	font-family: "Lucida Console", Courier, monospace;
+	padding-left: 10px;
 
 }
 

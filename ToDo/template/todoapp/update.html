@@ -3,7 +3,7 @@
 
 {% block body_block %} 
 {{ block.super }}
-    <div class="form_create" >
+    <div class="mylist-update-form" >
        <form id="preventsubmit"  method="post">
             <fieldset>
                   <legend>Update Task</legend>
@@ -75,7 +75,6 @@
           document.getElementById("create_month").value = String(Number(val));
         }
     function statusSelect(val) {
-      console.log(val);
           document.getElementById("select_status").value = val;
         }
     statusSelect("{{status}}");

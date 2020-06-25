@@ -10,15 +10,18 @@
 		{% csrf_token %}
 
 		<label>Task</label>
-		<input type="text" class="form-control" name="task"><br>
+		<input type="text" class="form-control" name="task" required><br>
 
 		<label>Assign to</label>
-		<select name="member_id" class="form-control" >
+		<select name="member_id" class="form-control" required>
             <option value="" disabled selected>Select Member</option>
             {% for data in grp_member %}
             <option value="{{data.id}}">{{data.member}}</option>
             {% endfor%}
-        </select><br>
+    </select><br> 
+    <label>Comments</label>
+    <textarea class="form-control" name="comment" style="width:86%;" required></textarea>
+
 	
 	<input type="submit"  value="Assign" class="btn btn-primary btn-sm">
 		

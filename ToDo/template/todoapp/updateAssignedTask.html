@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+{% extends "todoapp/base2.html" %}
+
+{% block body_block %}
+{{ block.super }}
+
+<div class="updatetask_outer" >
+	<div class="updatetask">
+	<h3>Update Tasks</h3>
+	<form method="post" action='/updateAssignedTask/{{id}}/{{grpid}}/'>
+		{% csrf_token %}
+
+		<label>Task</label>
+		<input type="text" class="form-control" name="task" value="{{task}}" required><br>
+
+    <label>Status</label>
+     <select class="form-control" id="grp-staus-select"  name="status">
+          <option value="ToDo" >ToDo</option>
+          <option value="In Progress" >In Progress</option>
+          <option value="Done" >Done</option>
+    </select><br>                     
+
+		<label>Assign to</label>
+		<select name="member_id" id="member-select" class="form-control" >
+            {% for data in grp_member %}
+            <option value="{{data.id}}">{{data.member}}</option>
+            {% endfor%}
+    </select><br>
+    <label>Comment</label>
+    <textarea class="form-control" name="comment" required>{{comment}}</textarea><br>
+
+	
+	<input type="submit"  value="Update" class="btn btn-primary btn-sm">
+		
+	</form>
+  </div>
+  </div>
+
+  <div class="task-detail">
+      <table class="table table-bordered sortable">
+        <thead class="thead-light">
+        <tr>
+          <th>Assigned To</th>
+          <th>Task</th>
+          <th>Assigned By</th>
+        </tr>
+      </thead>
+        <tr>
+          <td >{{assigned_to_name}}</td>
+          <td >{{task}}</td>
+          <td>{{assigned_by}}</td>
+        </tr>
+      </table>
+<br>
+<div style="border-bottom: 2px solid grey; left:2px; " ></div>
+</div> 
+
+<div class="comment-details">
+       <h4>Activity</h4>
+       show:&nbsp<a href="/updateAssignedTask/{{id}}/{{grpid}}/Comments" class="btn btn-primary btn-sm">Comments</a>
+      <a href="/updateAssignedTask/{{id}}/{{grpid}}/History" class='btn btn-primary btn-sm'>History</a>
+       <hr>
+       {% if historyFlag %}
+        {% for data in delailedActivity %}
+          <div style="border-left:5px solid black; border-bottom:1px solid grey">
+          <p id ="activity-updated-by">{{data.updated_by}}<span id="activity-date">{{data.dateTime}}</span></p>
+          {{data.history|linebreaks}}         
+          </div>
+        {% endfor %}
+      {% else %}
+        {% for data in delailedActivity %}
+          {% if data.comments != 'None' %}
+          <div style="border-left:5px solid black; border-bottom:1px solid grey">
+          <p id ="activity-updated-by">{{data.updated_by}}<span id="activity-date">{{data.dateTime}}</span></p>
+          {{data.comments}}         
+          </div>
+          {% endif %}
+        {% endfor %} 
+
+      {% endif %}
+      <br><br>
+</div>
+
+  <script>
+    function memberSelect(val) {
+          document.getElementById("member-select").value = val;
+      }
+    function statusSelect(val) {
+      console.log(val)
+          document.getElementById("grp-staus-select").value = val;
+        }
+    statusSelect("{{status}}");
+      memberSelect("{{assigned_to_id}}")
+  </script>
+	
+  {% if messages %}
+    {% for message in messages %}
+      <script>
+          alert("{{message}}");
+        </script>
+    {% endfor %}
+  {% endif %}
+<script >
+  function testfunction(){
+
+      console.log("hello");
+    var data1 = [
+        {%for data2 in data%}
+          "{{data2.date}}","{{data2.time}}",
+        {%endfor%}
+      ];
+    var task = [
+        {%for data2 in data%}
+          "{{data2.task}}",
+        {%endfor%}
+      ];
+
+      var timearr =[];
+    var i;
+  for(i=0;i<(data1.length)-1;){
+        timearr[timearr.length]=data1[i]+data1[i+1];
+        i +=2;
+      }
+
+      var alarmInfo = {};
+    
+      for (let i =0; i < timearr.length; i++) {
+        alarmInfo[timearr[i]+task[i]] = 'no';
+      }
+      
+      setInterval(function(){logical(timearr,alarmInfo,task);}, 1000);  
+
+  }
+</script>
+
+
+
+{%endblock%}

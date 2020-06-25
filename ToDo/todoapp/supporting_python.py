@@ -1,5 +1,5 @@
 from datetime import datetime,time
-from todoapp.models import ToDoModel
+from todoapp.models import ToDoModel,TaskAssignModel,GroupModel,GroupAdminsModel
 
 
 #################This function is used to check date and time is updated or not after submitting update form#####################
@@ -101,7 +101,7 @@ def time_format(time):
 
 
 
-##########################This function is used to  check time in todo list is due or not#################################
+##########################This function is used to  check time in todo list is due or not##############################################
 
 
 
@@ -115,6 +115,98 @@ def task_flag_update(user):
         if current_date == tasktime:
             task.flagTask = 'yes'
             task.save()
+
+
+
+###################################Function to check group task comment is changed or not ########################################################
+
+def historyCheck(recentComment,recentTask,recentStatus,memberId,id):
+    oldData = TaskAssignModel.objects.get(id=id)
+    ct,tk,ss,mid,flag=False,False,False,False,False
+
+
+    if oldData.comment != recentComment :
+        flag = True
+        ct = 'Comment:'+ recentComment + '\n'
+
+    if oldData.task != recentTask:
+        tk = 'Task:' + recentTask + '\n'
+
+    if oldData.status != recentStatus:
+        ss = 'Status:' + recentStatus + '\n'
+
+    if oldData.assigned_to_id_id != int(memberId):
+        member=GroupModel.objects.get(id=memberId)
+        mid = 'Assigned To:' + str(member.member) + '\n'
+
+
+
+    if ct and tk and ss and mid:
+        return  tk + ss + ct + mid , flag
+
+    elif ct and tk and ss:
+        return tk + ss + ct , flag
+
+    elif ct and tk and mid:
+        return  tk+ct+ mid , flag
+
+    elif ct and ss and mid:
+        return  ss + ct + mid , flag
+
+    elif tk and ss and mid:
+        return tk + ss + mid , flag
+
+    elif ct and tk:
+        return  tk +ct  , flag
+
+    elif ct and mid:
+        return ct + mid , flag
+
+    elif ss and mid:
+        return ss + mid, flag
+
+    elif ct and ss:
+        return ss + ct  , flag
+
+    elif mid and tk:
+        return tk  + mid , flag
+
+    elif ss and tk:
+        return  tk + ss , flag
+
+    elif ct:
+        return ct , flag
+
+    elif tk:
+        return tk , flag
+
+    elif ss:
+        return ss, flag
+
+    elif mid:
+        return mid , flag
+
+    else:
+        return False, flag
+
+
+
+
+#######################################################################################################################
+
+def verifyGroupAdmin(user):
+
+    adminUsersData = GroupAdminsModel.objects.all()
+
+
+    for data in adminUsersData:
+        if data.adminUser == user:
+            return True
+
+        else:
+            return False
+
+
 
 
 

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+{% extends "todoapp/base2.html" %}
+
+{% block body_block %}
+{{ block.super }}
+<div class="sticky-top">
+	
+    <nav class="navbar navbar-expand-sm navbar-light bg-light ">
+    	<div class="container">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar2">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="navbar2">
+            <ul class="navbar-nav">
+                <li class="nav-item ">
+                    {% if grpdata_member %}	
+						<select class="form-control" id ="select-group" onchange="window.location.href=this.value">
+							{% for data in grpdata_member %}
+						    <option value="/group/{{data.grpid}}">{{data.group}}</option>
+						    {% endfor %}
+						</select>
+					{% endif %}
+                </li>&nbsp&nbsp&nbsp
+                <li class="nav-item">
+                   {% if selectedGroups %}	
+						<select class="form-control" id ="select-member" onchange="window.location.href=this.value">
+							<option value="/group/{{grpid}}"  selected>All members</option>
+							{% for data in selectedGroups %}
+						    <option value="/group/{{data.grpid}}/{{data.member}}">{{data.member}}</option>
+						    {% endfor %}
+						</select>
+					{% endif %}
+                </li>&nbsp&nbsp&nbsp
+                <li class="nav-item" style="padding-top: 4px;">
+                	{%if grpid%}
+					<a href="" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createtaskmodalform">Create Task&nbsp<i class="fa fa-plus"></i></a>
+                	{%endif%}
+				</li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+            	<li class="nav-item">
+            		{% if verifyUserFlag %}
+            		{%if grpid%}
+            		<a href=" " class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addmembermodalform">Add member</a>
+            		{% endif %}
+            		{% endif %}
+            	</li>&nbsp&nbsp&nbsp
+            	<li class="nav-item">
+            		{% if verifyUserFlag %}
+            		<a href="/createGroup" class="btn btn-primary btn-sm" >Edit Group</a>
+            		{% endif %}
+            </ul>
+        </div>
+        </div>
+    </nav>
+</div><br>
+
+	
+	
+	<div>
+		{% if not grpid %}
+		<h3>You don't have any group</h3>
+		{% endif %}
+		{% if listAllMemberTaskFlag  %}
+			<table class="table">
+				<tr>
+					<th>Assigned To</th>
+					<th>Task</th>
+					<th>Assigned By</th>
+				</tr>
+				{% for i in listAllMemberTask %}
+				{% for j in i %}
+				<tr>
+					<td>
+						{{j.assigned_to_name}}
+					</td>
+					<td>
+						<a href="/updateAssignedTask/{{j.id}}/{{grpid}}">{{j.task}}</a>
+					</td>
+					<td>
+						{{j.assigned_by}}
+					</td>
+				</tr>
+				{% endfor %}
+				{% endfor %}
+			</table>
+		
+	</div>
+	<div>
+		{% elif singleMemberTasksFlag %}
+			<table class="table">
+				<tr>
+					<th>Task</th>
+					<th>Assigned By </th>
+				</tr>
+				{% for i in singleMemberTasks %}
+				{% for j in i %}
+				<tr>
+					<td>
+						<a href="/updateAssignedTask/{{j.id}}/{{grpid}}">{{j.task}}</a>
+					</td>
+					<td>
+						{{j.assigned_by}}
+					</td>
+				</tr>
+				{% endfor %}
+				{% endfor %}
+			</table>
+		{% endif %}
+	</div>
+
+
+
+
+<div class="container my-4">
+
+    <div class="modal fade" id="addmembermodalform" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Add Member</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+       <label data-error="wrong" data-success="right" for="form3">Username</label>
+          <input type="text" id="member" class="form-control validate">
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <a href="" onclick="this.href='/addmember/{{grpid}}/'+ document.getElementById('member').value" class = "btn btn-primary btn-sm">Add</a>
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+
+
+
+
+
+<div class="container my-4">
+
+    <div class="modal fade" id="createtaskmodalform" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Assign Task</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" action="/createtask/{{grpid}}/">
+		{% csrf_token %}
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+       <label data-error="wrong" data-success="right" for="form1">Task</label>
+          <input type="text" id="form1" name="task" class="form-control validate" required>
+        </div>
+        <div class="md-form mb-5">
+       <label data-error="wrong" data-success="right" for="form2">Assign to</label>
+          <select name="member_id" class="form-control validate" required>
+            <option value="" disabled selected>Select Member</option>
+            {% for data in selectedGroups %}
+            <option value="{{data.id}}">{{data.member}}</option>
+            {% endfor%}
+    	</select>
+        </div>
+        <div class="md-form mb-5">
+       <label data-error="wrong" data-success="right" for="form3">Comment</label>
+           <textarea class="form-control validate" name="comment"  required></textarea>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <input type="submit"  value="Assign" class="btn btn-primary btn-sm">
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+  </div>
+
+
+
+
+
+
+
+	<script >
+		function groupSelect(val1) {
+          document.getElementById("select-group").value = "/group/"+val1;
+        }
+        function memberSelect(val1,val2) {
+			if(val2 != '') {
+				console.log("val2")
+          document.getElementById("select-member").value = "/group/"+val1+"/"+val2;
+      }
+      		else
+      		document.getElementById("select-member").value = "/group/"+val1;
+
+
+        }
+        groupSelect('{{grpid}}');
+        memberSelect('{{grpid}}','{{member}}');
+	</script>
+
+	{% if messages %}
+        {% for message in messages %}
+          <script>
+            alert("{{message}}");
+          </script>
+        {% endfor %}
+  {% endif %}
+	</div>
+<script >
+  function testfunction(){
+
+      console.log("hello");
+    var data1 = [
+        {%for data2 in data%}
+          "{{data2.date}}","{{data2.time}}",
+        {%endfor%}
+      ];
+    var task = [
+        {%for data2 in data%}
+          "{{data2.task}}",
+        {%endfor%}
+      ];
+
+      var timearr =[];
+    var i;
+  for(i=0;i<(data1.length)-1;){
+        timearr[timearr.length]=data1[i]+data1[i+1];
+        i +=2;
+      }
+
+      var alarmInfo = {};
+    
+      for (let i =0; i < timearr.length; i++) {
+        alarmInfo[timearr[i]+task[i]] = 'no';
+      }
+      
+      setInterval(function(){logical(timearr,alarmInfo,task);}, 1000);  
+
+  }
+</script>
+
+
+
+{%endblock%}
