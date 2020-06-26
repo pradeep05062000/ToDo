@@ -12,6 +12,7 @@ urlpatterns = [
     path('createGroup/',v1.createGroupview),
     path('deleteGroups/',v1.deleteGroupsView),
     path('createtask/',v1.createtaskview),
+    path('groupAdmin/',v1.addAdminView),
     re_path(r'^group/(?P<grpid>[\w\s]+)/$',v1.groupview),
     re_path(r'^group/(?P<grpid>[\w\s]+)/(?P<member>[\w\s]+)/$',v1.groupview),
     re_path(r'^mylist/(?P<mylist_choice>[\w-]+)/$',v1.mylist_view),
