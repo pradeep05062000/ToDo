@@ -3,7 +3,7 @@
 	
 	margin-top: 100px;
 	margin-left: 400px; 
-	position: relative;
+	position: absolute;
 }
 
 .selectGroup {
@@ -49,6 +49,7 @@
 	border-left: 2px solid grey;
 	padding-left: 10px;
 	height: 550px;
+	width: 25%;
 	top:55px;
 	right:5px;
 	position: absolute;
@@ -62,14 +63,14 @@
 
 .task-detail {
 	top:100px;
-	width: 700px;
-	left: 200px;
-	position: absolute;
+	width: 55%;
+	left: 15%;
+	position: relative;
 }
 .comment-details {
 	top:300px;
-	width: 700px;
-	margin-left: 200px;
+	width: 55%;
+	left: 15%;
 	position: absolute;
 }
 #activity-updated-by {

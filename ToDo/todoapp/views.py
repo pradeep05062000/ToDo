@@ -402,6 +402,10 @@ def addAdminView(request):
             adminObject.adminUser = request.POST.get('admin')
             adminObject.save()
 
+        if userNotExistFlag == True:
+            messages.info(request, 'No such username')
+
+
 
     grpAdmins = GroupAdminsModel.objects.all()
     mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
