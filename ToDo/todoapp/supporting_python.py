@@ -197,14 +197,14 @@ def historyCheck(recentComment,recentTask,recentStatus,memberId,id):
 def verifyGroupAdmin(user):
 
     adminUsersData = GroupAdminsModel.objects.all()
-
+    
 
     for data in adminUsersData:
         if data.adminUser == user:
             return True
 
-        else:
-            return False
+
+    return False
 
 
 

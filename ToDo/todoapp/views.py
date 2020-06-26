@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from todoapp.forms import SignUpForm,ResetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from todoapp.models import ToDoModel,SummaryModel,GroupModel,TaskAssignModel,GroupTaskActivityModel
+from todoapp.models import ToDoModel,SummaryModel,GroupModel,TaskAssignModel,GroupTaskActivityModel,GroupAdminsModel
 from django.contrib.auth.models import User
 from django.contrib import messages
 from datetime import datetime,time
@@ -370,6 +370,46 @@ def addMemberview(request,grpid=None,member=None):
     return render(request,'todoapp/group.html',
             {'listAllMemberTaskFlag':listAllMemberTaskFlag,'selectedGroups':selectedGroups,'current_user':request.user,'verifyUserFlag':verifyUserFlag,
             'grpid':grpid ,'grpdata_member':grpdata_member,'data':mylist_data,'listAllMemberTask':listAllMemberTask})
+
+###################################################################################################################################
+def addAdminView(request):
+    userExistFlag,userNotExistFlag = False,True
+
+    if request.method == 'POST':
+        grpAdmins = GroupAdminsModel.objects.all()
+        for x in request.POST:                              #   This logic is used to select and delete the multipul objects
+            if x.isnumeric():                               #
+                GroupAdminsModel.objects.get(id=x).delete()
+
+        allUserObject = User.objects.all()
+
+        for x in allUserObject:
+            if str(x.username) == request.POST.get('admin'):
+                userObject = User.objects.get(username=x.username)
+                userNotExistFlag = False
+                break;
+
+        for x in grpAdmins:
+            if x.adminUser == request.POST.get('admin'):
+                userExistFlag = True
+                messages.info(request, 'Username already exists')
+                break;
+
+
+        if userNotExistFlag == False and userExistFlag == False:
+            adminObject = GroupAdminsModel()
+            adminObject.adminUser_id = userObject
+            adminObject.adminUser = request.POST.get('admin')
+            adminObject.save()
+
+
+    grpAdmins = GroupAdminsModel.objects.all()
+    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
+    task_flag_update(request.user)
+
+    return render(request,'todoapp/groupAdmin.html',{'grpAdmins':grpAdmins,'current_user':request.user,'data':mylist_data})
+
+
  
 ######################This function is used to assign tasks to members######################################################
 @login_required
