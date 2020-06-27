@@ -1,65 +1,63 @@
 <!DOCTYPE html>
 {% extends "todoapp/base2.html" %}
-
+{% load crispy_forms_tags %}
 {% block body_block %}
 {{ block.super }}
 
-<div class="updatetask_outer" >
-	<div class="updatetask">
-	<h3>Update Tasks</h3>
-	<form method="post" action='/updateAssignedTask/{{id}}/{{grpid}}/'>
-		{% csrf_token %}
 
-		<label>Task</label>
-		<input type="text" class="form-control" name="task" value="{{task}}" required><br>
-
-    <label>Status</label>
-     <select class="form-control" id="grp-staus-select"  name="status">
-          <option value="ToDo" >ToDo</option>
-          <option value="In Progress" >In Progress</option>
-          <option value="Done" >Done</option>
-    </select><br>                     
-
-		<label>Assign to</label>
-		<select name="member_id" id="member-select" class="form-control" >
-            {% for data in grp_member %}
-            <option value="{{data.id}}">{{data.member}}</option>
-            {% endfor%}
-    </select><br>
-    <label>Comment</label>
-    <textarea class="form-control" name="comment" required></textarea><br>
-
-	
-	<input type="submit"  value="Update" class="btn btn-primary btn-sm">
-		
-	</form>
-  </div>
-  </div>
-
+<div class="update-task-outer">
   <div class="task-detail">
       <table class="table table-bordered sortable">
         <thead class="thead-light">
         <tr>
-          <th>Assigned To</th>
           <th>Task</th>
-          <th>Assigned By</th>
+          <th>Status</th>
+          <th>Recent Comment</th>
         </tr>
       </thead>
         <tr>
-          <td >{{assigned_to_name}}</td>
           <td >{{task}}</td>
-          <td>{{assigned_by}}</td>
+          <td >{{status}}</td>
+          <td>{{comment}}</td>
         </tr>
       </table>
 <br>
 <div style="border-bottom: 2px solid grey; left:2px; " ></div>
 </div> 
+<div class="file-btn">
 
-<div class="comment-details">
-       <h4>Activity</h4>
+  <a href=" " data-toggle="modal" data-target="#addAttatchmentFile" class="btn btn-primary btn-sm">Add File</a>
+  <a href=" " data-toggle="modal" data-target="#addLink" class="btn btn-primary btn-sm">Add Link</a>
+  <a href=" " data-toggle="modal" data-target="#UpdateTask" class="btn btn-primary btn-sm">update Task</a>
+
+ <div style="border-bottom: 1px solid lightgrey; padding-top: 3px;" ></div> 
+</div >
+
+<div class="file-attachments">
+  {% if allfiles %}
+  Attachments:
+  {% for data in allfiles %}
+  <a href="/{{data.document.url}}">{{data.fileName}},</a> 
+  {% endfor %}
+  <br><br>
+  {% endif %}
+  {% if allLinks %}
+  Web Links:
+  {% for data in allLinks %}
+  <a href="{{data.link}}">{{data.link}}</a> 
+  {% endfor %}
+  <br><br>
+  {% endif %}
+  <h4>Activity</h4>
        show:&nbsp<a href="/updateAssignedTask/{{id}}/{{grpid}}/Comments" class="btn btn-primary btn-sm">Comments</a>
       <a href="/updateAssignedTask/{{id}}/{{grpid}}/History" class='btn btn-primary btn-sm'>History</a>
        <hr>
+       <form method="post" action='/updateAssignedTask/{{id}}/{{grpid}}/'>
+            {% csrf_token %}
+               <label>Comment:</label>&nbsp&nbsp<input type="submit"  value="Add Comment" class="btn btn-primary btn-sm">
+               <textarea name="comment" class="form-control" rows="1" cols="50" required></textarea>
+               
+        </form><br>
        {% if historyFlag %}
         {% for data in delailedActivity %}
           <div style="border-left:5px solid black; border-bottom:1px solid grey">
@@ -79,7 +77,126 @@
 
       {% endif %}
       <br><br>
+  
+  </div>
 </div>
+
+
+<div class="container my-4">
+
+    <div class="modal fade" id="UpdateTask" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Update Task</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" action='/updateAssignedTask/{{id}}/{{grpid}}/'>
+    {% csrf_token %}
+
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+       <label data-error="wrong" data-success="right" >Task</label>
+          <input type="text" name="task" class="form-control validate" value="{{task}}" required>
+        </div>
+
+        <div class="md-form mb-5">
+       <label data-error="wrong" data-success="right" >Status</label>
+          <select name="status" class="form-control validate" id="grp-staus-select" required>
+            <option value="ToDo" >ToDo</option>
+            <option value="In Progress" >In Progress</option>
+            <option value="Done" >Done</option>
+          </select>
+      </div>
+
+        <div class="md-form mb-5">
+       <label data-error="wrong" data-success="right" >Assign to</label>
+          <select name="member_id" id="member-select" class="form-control validate" required>
+            {% for data in grp_member %}
+            <option value="{{data.id}}">{{data.member}}</option>
+            {% endfor%}
+      </select>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <input type="submit"  value="Update" class="btn btn-primary btn-sm">
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+  </div>
+
+
+
+<div class="container my-4">
+
+    <div class="modal fade" id="addAttatchmentFile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Add File</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/attachTaskFile/{{id}}/{{grpid}}/" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+            {{ formFile|crispy}}
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary btn-sm">Add</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+  </div>
+
+<div class="container my-4">
+
+    <div class="modal fade" id="addLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Add Web Link</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/webLinkTask/{{id}}/{{grpid}}/" method="post" >
+        {% csrf_token %}
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+            {{ formLink|crispy}}
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary btn-sm">Add</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+  </div>
+
+
+
+
+
+
+
 
   <script>
     function memberSelect(val) {

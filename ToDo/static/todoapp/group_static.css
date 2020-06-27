@@ -44,35 +44,32 @@
 	position: relative;
 
 }
+.update-task-outer {
 
-.updatetask_outer {
-	border-left: 2px solid grey;
-	padding-left: 10px;
-	height: 550px;
-	width: 25%;
-	top:55px;
-	right:5px;
+	left: 25%;
 	position: absolute;
-}
 
- .updatetask {
-	top: 10px;
-	width: 300px;
-	position: relative;
 }
 
 .task-detail {
 	top:100px;
-	width: 55%;
-	left: 15%;
+	width: 600px;
 	position: relative;
 }
-.comment-details {
-	top:300px;
-	width: 55%;
-	left: 15%;
+
+.file-btn{
+	top:270px;
+	width: 600px;
 	position: absolute;
 }
+
+.file-attachments{
+	top:320px;
+	width: 600px;
+	height: 10%;
+	position: absolute;
+}
+
 #activity-updated-by {
 	font-weight: bold;
 }

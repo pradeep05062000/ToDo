@@ -1,4 +1,5 @@
-
+from ToDo import settings
+from django.conf.urls.static import static
 
 from django.urls import path,re_path
 from todoapp import views as v1            
@@ -13,6 +14,8 @@ urlpatterns = [
     path('deleteGroups/',v1.deleteGroupsView),
     path('createtask/',v1.createtaskview),
     path('groupAdmin/',v1.addAdminView),
+    re_path(r'^attachTaskFile/(?P<id>[\d]+)/(?P<grpid>[\w\s]+)',v1.fileAttachmentView),
+    re_path(r'^webLinkTask/(?P<id>[\d]+)/(?P<grpid>[\w\s]+)',v1.webLinkAttachmentView),
     re_path(r'^group/(?P<grpid>[\w\s]+)/$',v1.groupview),
     re_path(r'^group/(?P<grpid>[\w\s]+)/(?P<member>[\w\s]+)/$',v1.groupview),
     re_path(r'^mylist/(?P<mylist_choice>[\w-]+)/$',v1.mylist_view),
@@ -27,4 +30,9 @@ urlpatterns = [
     re_path(r'(?P<id>[\d]+)/update',v1.updatelist_view),
 
 ]
+
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 	

@@ -1,8 +1,8 @@
 from django.shortcuts import render,redirect
-from todoapp.forms import SignUpForm,ResetPasswordForm
+from todoapp.forms import SignUpForm,ResetPasswordForm,GroupTaskAttachmentsForm,GroupTaskWebLinkForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from todoapp.models import ToDoModel,SummaryModel,GroupModel,TaskAssignModel,GroupTaskActivityModel,GroupAdminsModel
+from todoapp.models import ToDoModel,SummaryModel,GroupModel,TaskAssignModel,GroupTaskActivityModel,GroupAdminsModel,GroupTaskAttachmentsModel,GroupTaskWebLinkModel
 from django.contrib.auth.models import User
 from django.contrib import messages
 from datetime import datetime,time
@@ -315,10 +315,6 @@ def deleteGroupsView(request):
 @login_required
 def addMemberview(request,grpid=None,member=None):
     flag,memberFlag = False,True
-    listAllMemberTaskFlag,singleMemberTasksFlag = False,False
-    verifyUserFlag = verifyGroupAdmin(str(request.user))
-    grpdata_member=GroupModel.objects.filter(member=request.user)
-
 
     if member != None:
 
@@ -351,26 +347,10 @@ def addMemberview(request,grpid=None,member=None):
                     messages.info(request, 'No such username')
         else:
             messages.info(request, 'Member already exist')
-    listAllMemberTask = []
-    grpdata = GroupModel.objects.filter(member=request.user)
-    for x in grpdata:
-        grpid = x.grpid
-        break
-    selectedGroups=GroupModel.objects.filter(grpid=grpid)
-    for x in selectedGroups:
-        listAllMemberTask.append(TaskAssignModel.objects.filter(assigned_to_id=x.id))
 
-    for x in listAllMemberTask:
-        if len(x) != 0:
-            listAllMemberTaskFlag = True
 
-    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
-    task_flag_update(request.user)
-
-    return render(request,'todoapp/group.html',
-            {'listAllMemberTaskFlag':listAllMemberTaskFlag,'selectedGroups':selectedGroups,'current_user':request.user,'verifyUserFlag':verifyUserFlag,
-            'grpid':grpid ,'grpdata_member':grpdata_member,'data':mylist_data,'listAllMemberTask':listAllMemberTask})
-
+    return redirect('/group/' + grpid)
+    
 ###################################################################################################################################
 def addAdminView(request):
     userExistFlag,userNotExistFlag = False,True
@@ -419,10 +399,6 @@ def addAdminView(request):
 @login_required
 def createtaskview(request,grpid=None):
 
-    listAllMemberTaskFlag,singleMemberTasksFlag = False,False
-    verifyUserFlag = verifyGroupAdmin(str(request.user))
-    grpdata_member=GroupModel.objects.filter(member=request.user)
-
 
     if request.method == 'POST':
         memberObject = GroupModel.objects.get(id=request.POST.get('member_id'))
@@ -444,33 +420,20 @@ def createtaskview(request,grpid=None):
         historyDetail.updated_by = str(request.user)
         historyDetail.save()
 
+    return redirect('/group/'+ grpid )
 
-    listAllMemberTask = []
-    grpdata = GroupModel.objects.filter(member=request.user)
-    for x in grpdata:
-        grpid = x.grpid
-        break
-    selectedGroups=GroupModel.objects.filter(grpid=grpid)
-    for x in selectedGroups:
-        listAllMemberTask.append(TaskAssignModel.objects.filter(assigned_to_id=x.id))
 
-    for x in listAllMemberTask:
-        if len(x) != 0:
-            listAllMemberTaskFlag = True
-
-    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
-    task_flag_update(request.user)
-
-    return render(request,'todoapp/group.html',
-            {'listAllMemberTaskFlag':listAllMemberTaskFlag,'selectedGroups':selectedGroups,'current_user':request.user,'verifyUserFlag':verifyUserFlag,
-            'grpid':grpid ,'grpdata_member':grpdata_member,'data':mylist_data,'listAllMemberTask':listAllMemberTask})
-
+    
 
 #######################################################################################################################################
 @login_required
 def updateAssignedTaskView(request,id=None,grpid=None,activityOption=None):
     historyFlag = False
     updateTask = TaskAssignModel.objects.get(id=id)
+    allfiles = GroupTaskAttachmentsModel.objects.filter(fileTask_id=id)
+    allLinks = GroupTaskWebLinkModel.objects.filter(linkTask_id=id)
+    formFile = GroupTaskAttachmentsForm()
+    formLink = GroupTaskWebLinkForm()
     if activityOption == 'History/':
         historyFlag = True 
     
@@ -478,12 +441,16 @@ def updateAssignedTaskView(request,id=None,grpid=None,activityOption=None):
         historyCheckFlag,flag = historyCheck(request.POST.get('comment'),request.POST.get('task'),request.POST.get('status'),
             request.POST.get('member_id'),id)
         updateTask = TaskAssignModel.objects.get(id=id)
-        memberObject = GroupModel.objects.get(id=request.POST.get('member_id'))
-        updateTask.assigned_to_id = memberObject
-        updateTask.assigned_to_name = str(memberObject.member)
-        updateTask.task = request.POST.get('task')
-        updateTask.status = request.POST.get('status')
-        updateTask.comment = request.POST.get('comment')
+        if request.POST.get('member_id'):
+            memberObject = GroupModel.objects.get(id=request.POST.get('member_id'))
+            updateTask.assigned_to_id = memberObject
+            updateTask.assigned_to_name = str(memberObject.member)
+        if request.POST.get('task'):
+            updateTask.task = request.POST.get('task')
+        if request.POST.get('status'):
+            updateTask.status = request.POST.get('status')
+        if request.POST.get('comment'):
+            updateTask.comment = request.POST.get('comment')
         updateTask.assigned_by = str(request.user)
         updateTask.save()
 
@@ -511,9 +478,36 @@ def updateAssignedTaskView(request,id=None,grpid=None,activityOption=None):
     delailedActivity = GroupTaskActivityModel.objects.filter(grpTaskActivity_id_id=id)
 
     return render(request,'todoapp/updateAssignedTask.html',
-        {'id':id,'grpid':grpid,'historyFlag':historyFlag,'status':status,'current_user':request.user,'task':task,'grp_member':grp_member,'comment':comment,'delailedActivity':delailedActivity,
-        'assigned_to_id':assigned_to_id,'assigned_by':assigned_by,'assigned_to_name':assigned_to_name,'data':mylist_data})
+        {'id':id,'grpid':grpid,'historyFlag':historyFlag,'status':status,'allfiles':allfiles,'allLinks':allLinks,'formFile':formFile,'formLink':formLink,
+        'current_user':request.user,'task':task,'grp_member':grp_member,'comment':comment,'delailedActivity':delailedActivity,
+        'assigned_to_id':assigned_to_id,'data':mylist_data})
 
+
+###########################################################################################################################################################################################
+def fileAttachmentView(request,id=None,grpid=None):
+    if request.method == 'POST':
+        fileTask = TaskAssignModel.objects.get(id=id)
+        form = GroupTaskAttachmentsForm(request.POST, request.FILES)
+        if form.is_valid():
+            add_file_id = form.save(commit=False)
+            add_file_id.fileTask_id = fileTask
+            add_file_id.save()
+
+    return redirect('/updateAssignedTask/' + id + '/' + grpid )
+
+
+
+def webLinkAttachmentView(request,id=None,grpid=None):
+    if request.method == 'POST':
+        fileTask = TaskAssignModel.objects.get(id=id)
+        form = GroupTaskWebLinkForm(request.POST)
+        if form.is_valid():
+            add_link_id = form.save(commit=False)
+            add_link_id.linkTask_id = fileTask
+            add_link_id.save()
+
+
+    return redirect('/updateAssignedTask/' + id + '/' + grpid )
 
 
 

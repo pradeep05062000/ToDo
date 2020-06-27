@@ -1,5 +1,5 @@
 from django import forms
-from todoapp.models import ToDoModel
+from todoapp.models import ToDoModel,GroupTaskAttachmentsModel,GroupTaskWebLinkModel
 from django.contrib.admin import widgets
 from django.contrib.auth.models import User
 from django.core import validators
@@ -52,6 +52,23 @@ class ResetPasswordForm(forms.Form):
 
         if newp!=checkp:
             raise forms.ValidationError("Password Does Not Match")
+
+
+##############################################################################################################################
+
+class GroupTaskAttachmentsForm(forms.ModelForm):
+    class Meta:
+        model = GroupTaskAttachmentsModel
+        fields = ('fileName','document')
+        labels = {
+            'fileName' : 'File Name'
+        }
+
+
+class GroupTaskWebLinkForm(forms.ModelForm):
+    class Meta:
+        model =GroupTaskWebLinkModel
+        fields = ('link',)
 
 
 

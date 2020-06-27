@@ -1,5 +1,5 @@
 from django.contrib import admin
-from todoapp.models import ToDoModel,SummaryModel,GroupModel,TaskAssignModel,GroupTaskActivityModel,GroupAdminsModel
+from todoapp.models import ToDoModel,SummaryModel,GroupModel,TaskAssignModel,GroupTaskActivityModel,GroupAdminsModel,GroupTaskAttachmentsModel,GroupTaskWebLinkModel
 # Register your models here.
 
 class ToDoAdmin(admin.ModelAdmin):
@@ -23,12 +23,21 @@ class GroupTaskActivityAdmin(admin.ModelAdmin):
 class GroupAdminsAdmin(admin.ModelAdmin):
 	list_display = ['adminUser_id','adminUser']
 
+class GroupTaskAttachmentsAdmin(admin.ModelAdmin):
+	list_display = ['fileTask_id','fileName','document','uploaded_at']
+
+class GroupTaskWebLinkAdmin(admin.ModelAdmin):
+	list_display = ['linkTask_id','link']
 
 admin.site.register(GroupModel,GroupAdmin)
 
 admin.site.register(TaskAssignModel,TaskAssignAdmin)
 
 admin.site.register(GroupTaskActivityModel,GroupTaskActivityAdmin)
+
+admin.site.register(GroupTaskAttachmentsModel,GroupTaskAttachmentsAdmin)
+
+admin.site.register(GroupTaskWebLinkModel,GroupTaskWebLinkAdmin)
 
 admin.site.register(ToDoModel,ToDoAdmin)
 

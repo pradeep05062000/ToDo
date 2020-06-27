@@ -49,6 +49,16 @@ class GroupTaskActivityModel(models.Model):
 	dateTime=models.DateTimeField(blank=True,default=None)
 	updated_by=models.CharField(max_length=60)
 
+class GroupTaskAttachmentsModel(models.Model):
+	fileTask_id = models.ForeignKey(TaskAssignModel,on_delete=models.CASCADE,null=True)
+	fileName = models.CharField(max_length=60)
+	document = models.FileField()
+	uploaded_at = models.DateTimeField(auto_now_add=True)
+
+class GroupTaskWebLinkModel(models.Model):
+	linkTask_id = models.ForeignKey(TaskAssignModel,on_delete=models.CASCADE,null=True)
+	link = models.URLField(max_length=200) 
+
 
 class GroupAdminsModel(models.Model):
 	adminUser_id = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
