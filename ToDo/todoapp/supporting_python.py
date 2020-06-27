@@ -124,20 +124,25 @@ def historyCheck(recentComment,recentTask,recentStatus,memberId,id):
     oldData = TaskAssignModel.objects.get(id=id)
     ct,tk,ss,mid,flag=False,False,False,False,False
 
+    print(recentTask)
 
     if oldData.comment != recentComment :
-        flag = True
-        ct = 'Comment:'+ recentComment + '\n'
+        if recentComment != None:
+            flag = True
+            ct = 'Comment:'+ recentComment + '\n'
 
     if oldData.task != recentTask:
-        tk = 'Task:' + recentTask + '\n'
+        if recentTask != None:
+            tk = 'Task:' + recentTask + '\n'
 
     if oldData.status != recentStatus:
-        ss = 'Status:' + recentStatus + '\n'
+        if recentStatus != None:
+            ss = 'Status:' + recentStatus + '\n'
 
-    if oldData.assigned_to_id_id != int(memberId):
-        member=GroupModel.objects.get(id=memberId)
-        mid = 'Assigned To:' + str(member.member) + '\n'
+    if memberId != None:
+        if oldData.assigned_to_id_id != int(memberId):
+            member=GroupModel.objects.get(id=memberId)
+            mid = 'Assigned To:' + str(member.member) + '\n'
 
 
 

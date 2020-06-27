@@ -1,5 +1,5 @@
 from django import forms
-from todoapp.models import ToDoModel,GroupTaskAttachmentsModel
+from todoapp.models import ToDoModel,GroupTaskAttachmentsModel,GroupTaskWebLinkModel
 from django.contrib.admin import widgets
 from django.contrib.auth.models import User
 from django.core import validators
@@ -63,6 +63,12 @@ class GroupTaskAttachmentsForm(forms.ModelForm):
         labels = {
             'fileName' : 'File Name'
         }
+
+
+class GroupTaskWebLinkForm(forms.ModelForm):
+    class Meta:
+        model =GroupTaskWebLinkModel
+        fields = ('link',)
 
 
 
