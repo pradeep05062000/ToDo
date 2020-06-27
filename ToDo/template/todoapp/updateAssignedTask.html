@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% extends "todoapp/base2.html" %}
-
+{% load crispy_forms_tags %}
 {% block body_block %}
 {{ block.super }}
 
@@ -54,8 +54,20 @@
 <br>
 <div style="border-bottom: 2px solid grey; left:2px; " ></div>
 </div> 
+<div>
+
+  <a href=" " data-toggle="modal" data-target="#addAttatchment" class="btn btn-primary btn-sm">Attach</a><br>
+  {% if allfiles %}
+  {% for data in allfiles %}
+  <a href="/{{data.document.url}}">{{data.fileName}}</a>
+    
+  {% endfor %}
+  {% endif %}
+  
+</div>
 
 <div class="comment-details">
+ 
        <h4>Activity</h4>
        show:&nbsp<a href="/updateAssignedTask/{{id}}/{{grpid}}/Comments" class="btn btn-primary btn-sm">Comments</a>
       <a href="/updateAssignedTask/{{id}}/{{grpid}}/History" class='btn btn-primary btn-sm'>History</a>
@@ -80,6 +92,42 @@
       {% endif %}
       <br><br>
 </div>
+
+
+
+<div class="container my-4">
+
+    <div class="modal fade" id="addAttatchment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Add File</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/attachTaskFile/{{id}}/{{grpid}}/" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+            {{ form|crispy}}
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary btn-sm">Attach</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+  </div>
+
+
+
+
+
 
   <script>
     function memberSelect(val) {
