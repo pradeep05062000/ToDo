@@ -71,6 +71,7 @@
   {% endif %}
 
   <script >
+    //This function is used to select the value from select field which is already assigend 
     function monthSelect(val) {
           document.getElementById("create_month").value = String(Number(val));
         }
@@ -96,7 +97,7 @@
   
       console.log('inside update');
       var element;
-      element=setInterval(function(){logical(data1,task,element);}, 20000);      
+      element=setInterval(function(){taskNotification(data1,task,element);}, 20000);      
 
   }
 </script>

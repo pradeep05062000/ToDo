@@ -19,7 +19,7 @@ class SignUpForm(forms.ModelForm):
     username=forms.CharField(validators=[name_exist])
     class Meta:
         model=User
-        fields=['username','password','first_name','last_name']
+        fields=['username','password','first_name','last_name' , 'email']
         widgets = {
             'password': forms.PasswordInput(),
         }
@@ -41,7 +41,7 @@ class ResetPasswordForm(forms.Form):
     def clean_oldp(self):
         password=self.cleaned_data['oldp']
         user = authenticate(username=self.request.user, password=password)  #### To check password of particular user we use authenticate function
-        if user == None:
+        if user == None:                                                    ###Basically we are verifying old password
             raise forms.ValidationError("Old Password is Wrong")
 
 
@@ -54,7 +54,7 @@ class ResetPasswordForm(forms.Form):
             raise forms.ValidationError("Password Does Not Match")
 
 
-##############################################################################################################################
+######################This form is of file attachments#######################################################
 
 class GroupTaskAttachmentsForm(forms.ModelForm):
     class Meta:
@@ -65,6 +65,7 @@ class GroupTaskAttachmentsForm(forms.ModelForm):
         }
 
 
+########################This form is of link attachements#####################################################3
 class GroupTaskWebLinkForm(forms.ModelForm):
     class Meta:
         model =GroupTaskWebLinkModel

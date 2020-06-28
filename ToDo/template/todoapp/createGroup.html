@@ -16,7 +16,7 @@
   <div class="bottom_border_style"></div>
 
   <div>
-    {% if grpdata_member %} 
+    {% if grpdata_member %} <!-- grpdata_member contains all the groups of current logged in user -->
     <form action="/deleteGroups/" method="post">
              {%csrf_token%}
     <table class="table table-bordered sortable" id="myTable" style="width: 60%;">
@@ -84,7 +84,7 @@
         alarmInfo[timearr[i]+task[i]] = 'no';
       }
       
-      setInterval(function(){logical(timearr,alarmInfo,task);}, 1000);  
+      setInterval(function(){taskNotification(timearr,alarmInfo,task);}, 1000);  
 
   }
 </script>

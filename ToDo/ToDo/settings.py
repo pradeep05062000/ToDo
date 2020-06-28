@@ -121,9 +121,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS=[
-STATIC_DIRS,
-]
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = 'media/'
+#This settings are done to retrive attached files of task from media folder created at project level
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_HOST_USER = 'djangoemail2020@gmail.com'
+EMAIL_HOST_PASSWORD = 'Pr@deep2000'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+#This is email integration
+

@@ -29,6 +29,7 @@
           {% else %}
         <h1 id="mylist_header">All Tasks</h1><br><br><br>
           {% endif %}
+          <!-- This 4 if elif condition are used to check which options is selected by end user (todo,inProgress,etc) -->
           <form method="post">
              {%csrf_token%}
 
@@ -95,7 +96,7 @@
         alarmInfo[timearr[i]+task[i]] = 'no';
       }
       
-      setInterval(function(){logical(timearr,alarmInfo,task);}, 1000);  
+      setInterval(function(){taskNotification(timearr,alarmInfo,task);}, 1000);  
 
   }
 </script>

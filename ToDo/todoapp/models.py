@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 
+####################This Model is created too store the data of all personal tasks of end user#################################
 class ToDoModel(models.Model):
 	user=models.ForeignKey(User,related_name='todolist',on_delete=models.CASCADE,null=True)
 	task=models.CharField(max_length=60)
@@ -15,7 +16,7 @@ class ToDoModel(models.Model):
 	flagTask = models.CharField(max_length=60,default='no')
 
 
-
+#######################This Model is used too keep record of all updated done in task##############################################
 class SummaryModel(models.Model):
     taskId=models.ForeignKey(ToDoModel,related_name='todolist',on_delete=models.CASCADE,null=True)
     dateTime=models.DateTimeField(blank=True,default=None)
@@ -25,6 +26,7 @@ class SummaryModel(models.Model):
 
 
 
+#########################This Model is created to store all group belonging too each user#############################################
 
 class GroupModel(models.Model):
 	grpid = models.CharField(max_length = 60)
@@ -32,7 +34,7 @@ class GroupModel(models.Model):
 	group =  models.CharField(max_length=60)
 	created_by = models.CharField(max_length = 60)
 
-
+###################This model is used to store the task of each member ###################################################################
 class TaskAssignModel(models.Model):
 	assigned_to_id = models.ForeignKey(GroupModel,on_delete=models.CASCADE,null=True)
 	assigned_to_name = models.CharField(max_length=60)
@@ -42,6 +44,7 @@ class TaskAssignModel(models.Model):
 	assigned_by = models.CharField(max_length = 60)
 
 
+##########################This Model is used to keep record of all updates made in task#########################################################
 class GroupTaskActivityModel(models.Model):
 	grpTaskActivity_id = models.ForeignKey(TaskAssignModel,on_delete=models.CASCADE,null=True)
 	comments = models.TextField(default='None')
@@ -49,16 +52,20 @@ class GroupTaskActivityModel(models.Model):
 	dateTime=models.DateTimeField(blank=True,default=None)
 	updated_by=models.CharField(max_length=60)
 
+######################This Model is used to keep record of all file attachments of task###########################################
 class GroupTaskAttachmentsModel(models.Model):
 	fileTask_id = models.ForeignKey(TaskAssignModel,on_delete=models.CASCADE,null=True)
 	fileName = models.CharField(max_length=60)
 	document = models.FileField()
 	uploaded_at = models.DateTimeField(auto_now_add=True)
 
+#####################This is used to keep record of all link attachments of task##########################################################
 class GroupTaskWebLinkModel(models.Model):
 	linkTask_id = models.ForeignKey(TaskAssignModel,on_delete=models.CASCADE,null=True)
 	link = models.URLField(max_length=200) 
 
+
+#######################This model is used to store the admin user##################################################
 
 class GroupAdminsModel(models.Model):
 	adminUser_id = models.ForeignKey(User,on_delete=models.CASCADE,null=True)

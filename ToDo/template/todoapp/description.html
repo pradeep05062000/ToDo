@@ -39,7 +39,7 @@
         <th >Description Details</th>
         <th >Date&Time</th>
       </tr>
-      {%for data in description_data%}
+      {%for data in description_data%}<!-- This contains all the record of selected task -->
         <tr>
           {% if data.description_summary != '' %}
             <script type="text/javascript">
@@ -97,7 +97,7 @@
       
    
 
-      setInterval(function(){logical(timearr,alarmInfo,task);}, 1000);  
+      setInterval(function(){taskNotification(timearr,alarmInfo,task);}, 1000);  
 
       
 

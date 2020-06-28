@@ -5,7 +5,7 @@
 {{ block.super }}
 
 <div class = "external_task_detail">
-{%if detail_data%}
+{%if detail_data%} <!-- This shows all the log (details) of task (in use) -->
   <h4>Task Details</h4>
       {%for data in detail_data%}
         <div class="task_detail" >
@@ -51,7 +51,7 @@
       
 
 
-      setInterval(function(){logical(timearr,alarmInfo,task);}, 1000);  
+      setInterval(function(){taskNotification(timearr,alarmInfo,task);}, 1000);  
 
   }
 </script>

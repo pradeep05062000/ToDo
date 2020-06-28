@@ -1,5 +1,7 @@
 from datetime import datetime,time
 from todoapp.models import ToDoModel,TaskAssignModel,GroupModel,GroupAdminsModel
+from django.core.mail import send_mail
+
 
 
 #################This function is used to check date and time is updated or not after submitting update form#####################
@@ -116,8 +118,6 @@ def task_flag_update(user):
             task.flagTask = 'yes'
             task.save()
 
-
-
 ###################################Function to check group task comment is changed or not ########################################################
 
 def historyCheck(recentComment,recentTask,recentStatus,memberId,id):
@@ -197,7 +197,7 @@ def historyCheck(recentComment,recentTask,recentStatus,memberId,id):
 
 
 
-#######################################################################################################################
+######################This function is used to check current user are added in GroupAdminModel model or not#########################################
 
 def verifyGroupAdmin(user):
 

@@ -1,3 +1,7 @@
+
+//This two function are used to sort the personal task in assinging 
+
+//This function is used to sord according to task name
 $(document).ready(function(){
   $(".first").click(function () {
   	var taskArr = $(".task").map( function() { 
@@ -19,7 +23,7 @@ $(document).ready(function(){
   });
 });
 
-
+//This function is used to sort according to date
 $(document).ready(function(){
   $(".second").click(function () {
   	

@@ -15,7 +15,7 @@
         <th >Create/Updated</th>
         <th >Date and Time</th>
       </tr>
-      {%for data in summary_data%}
+      {%for data in summary_data%} <!-- This is used to show only updated or created staatus of object -->
         <tr>
           {% if data.created_update != None %}
           <td >{{data.created_update}}</td>
@@ -58,7 +58,7 @@ console.log("hello");
       
      
 
-      setInterval(function(){logical(timearr,alarmInfo,task);}, 1000);  
+      setInterval(function(){taskNotification(timearr,alarmInfo,task);}, 1000);  
 
       
 

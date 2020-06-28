@@ -16,7 +16,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-  
+  <script type="text/javascript" src="{%static "todoapp/function.js" %}" ></script>
 
   </head>
   <body class="body_class"  id="stop" onload="testfunction()">
@@ -34,7 +34,7 @@
                 </li>
               </ul>
               <ul class="navbar-nav ml-auto">
-                     <span style="color:white;padding-top:9px;"><li>User:&nbsp{{current_user|title}}</li></span> &nbsp&nbsp&nbsp
+                     <span style="color:white;padding-top:9px;"><li>User:&nbsp{{current_user}}</li></span> &nbsp&nbsp&nbsp
                      <li class="nav-item dropdown">
                           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
                             My Acount
@@ -51,11 +51,9 @@
         </nav>
       {% block body_block %}
 
-      <script type="text/javascript" src="{%static "todoapp/function.js" %}" ></script>
 
       {% endblock %}
       <script type="text/javascript" src="{%static "todoapp/jquerry_sort.js" %}" defer></script>
-      <script type="text/javascript" src="{%static "todoapp/groupJquerry.js" %}" defer></script>
 
   </body>
 </html>

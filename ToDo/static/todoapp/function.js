@@ -29,7 +29,7 @@ function formatAMPM(date) {
     }
 
 
-function logical(timearr,alarmInfo,task){
+function taskNotification(timearr,alarmInfo,task){
   var num = (new Date()).getTime();
   let anyDate = new Date(num);
   var current_date = anyDate.toShortFormat();
@@ -47,11 +47,12 @@ function logical(timearr,alarmInfo,task){
       
 }
 
+/* This function is use to select all the check box */
+
 function selectAll(mainCheckBox,allCheckboxes){   
     
-      if(mainCheckBox.checked){
-         
-
+    if(mainCheckBox.checked){
+         //This condition is used to check wheter the check box of form used to delet object is selcted or not
     for(var i=0,n=allCheckboxes.length;i<n;i++){
       allCheckboxes[i].checked = true;
     }
@@ -66,7 +67,7 @@ function selectAll(mainCheckBox,allCheckboxes){
    
   }
 
-
+/* This function is used for form (personal task form) validation  */
 function form_check() {
     var task = 'task',day,month,year,hr,min,text,date,valid,flag1,flag2,flag3;
     
