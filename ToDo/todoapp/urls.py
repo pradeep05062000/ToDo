@@ -13,7 +13,7 @@ urlpatterns = [
     path('createGroup/',v1.createGroupview),
     path('deleteGroups/',v1.deleteGroupsView),
     path('createtask/',v1.createtaskview),
-    path('groupAdmin/',v1.addAdminView),
+    re_path(r'^groupAdmin/(?P<grpid>[\w\s]+)/$',v1.addAdminView),
     re_path(r'^attachTaskFile/(?P<id>[\d]+)/(?P<grpid>[\w\s]+)',v1.fileAttachmentView),
     re_path(r'^webLinkTask/(?P<id>[\d]+)/(?P<grpid>[\w\s]+)',v1.webLinkAttachmentView),
     re_path(r'^group/(?P<grpid>[\w\s]+)/$',v1.groupview),

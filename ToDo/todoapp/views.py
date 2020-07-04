@@ -205,74 +205,82 @@ def groupview(request,grpid=None,member=None):
 
     listAllMemberTaskFlag,singleMemberTasksFlag = False,False 
     ### this flags are used to check where all members from group are selected or single member
+    grpAdmins = GroupAdminsModel.objects.all()
+    ## Here we are retrieving all adminss
 
     grpdata_member=GroupModel.objects.filter(member=request.user)
     ##Here we are retreivng groups related to current end user
     mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
     task_flag_update(request.user)
     verifyUserFlag = verifyGroupAdmin(str(request.user))
-    
-    if grpid == None: #### grip == None means no group has been seleted by end user
-        listAllMemberTask = []
-        grpdata = GroupModel.objects.filter(member=request.user)
-        ## We are retriving all the group associated with the current user
-        for x in grpdata:
-            grpid = x.grpid
-            ###This step tell us first group has been selected 
-            ##because to show all data of the first group by default, when user enters to group view
-            break
-        selectedGroups=GroupModel.objects.filter(grpid=grpid)
-        ##Know Using grpid we retrive all the same groups from GroupModel (which means we get all the users of that group)
-        for x in selectedGroups:
-            listAllMemberTask.append(TaskAssignModel.objects.filter(assigned_to_id=x.id))
-            ##Here we are adding all members task object in the list
-            ##We do so, because each member can have multiple task and task all task are grouped in single index of list
-            ## Because we cannot send all tasks, of all member without using list
+    grpdata = GroupModel.objects.filter(member=request.user)
+    ## We are retriving all the group associated with the current user
+           
 
-        for x in listAllMemberTask:
-            if len(x) != 0:
-                listAllMemberTaskFlag = True
-                ##Here we are check is listAllMemberTask is empty or not
-                ##Because if it is empty than listAllMemberTaskFlag remains False and which indicates there are no task for any user in that group
 
-        return render(request,'todoapp/group.html',
-            {'listAllMemberTaskFlag':listAllMemberTaskFlag,'selectedGroups':selectedGroups,'current_user':request.user,'verifyUserFlag':verifyUserFlag,
-            'grpid':grpid ,'grpdata_member':grpdata_member,'data':mylist_data,'listAllMemberTask':listAllMemberTask})
-
-    elif member == None: ##In this conditon group is selected by user and we required to show all data of that grp
-        listAllMemberTask = []
-        selectedGroups=GroupModel.objects.filter(grpid=grpid)
-        for x in selectedGroups:
-            listAllMemberTask.append(TaskAssignModel.objects.filter(assigned_to_id=x.id))
-
-        for x in listAllMemberTask:
-            if len(x) != 0:
-                listAllMemberTaskFlag = True
-        return render(request,'todoapp/group.html',
-            {'listAllMemberTaskFlag':listAllMemberTaskFlag,'selectedGroups':selectedGroups,'current_user':request.user,'verifyUserFlag':verifyUserFlag,
-            'grpid':grpid,'grpdata_member':grpdata_member,'data':mylist_data,'listAllMemberTask':listAllMemberTask})
-
-    else:##In this condition we are selecting the data of single user 
-        singleMemberTasks = []
-        selectedGroups=GroupModel.objects.filter(grpid=grpid)
-        userData = User.objects.all() 
-        for x in userData:
-            if str(x.username) == member:
-                singleGroup=GroupModel.objects.filter(grpid=grpid,member=x)
+    if len(grpdata) != 0:
+        if grpid == None: #### grip == None means no group has been seleted by end user
+            listAllMemberTask = []
+            for x in grpdata:
+                grpid = x.grpid
+                ###This step tell us first group has been selected 
+                ##because to show all data of the first group by default, when user enters to group view
                 break
+            selectedGroups=GroupModel.objects.filter(grpid=grpid)
+            ##Know Using grpid we retrive all the same groups from GroupModel (which means we get all the users of that group)
+            for x in selectedGroups:
+                listAllMemberTask.append(TaskAssignModel.objects.filter(assigned_to_id=x.id))
+                ##Here we are adding all members task object in the list
+                ##We do so, because each member can have multiple task and task all task are grouped in single index of list
+                ## Because we cannot send all tasks, of all member without using list
 
-        for x in singleGroup:
-            singleMemberTasks.append(TaskAssignModel.objects.filter(assigned_to_id=x.id))
+            for x in listAllMemberTask:
+                if len(x) != 0:
+                    listAllMemberTaskFlag = True
+                    ##Here we are check is listAllMemberTask is empty or not
+                    ##Because if it is empty than listAllMemberTaskFlag remains False and which indicates there are no task for any user in that group
 
-        for x in singleMemberTasks:
-            if len(x) != 0:
-                singleMemberTasksFlag = True
-                break
+            return render(request,'todoapp/group.html',
+                {'listAllMemberTaskFlag':listAllMemberTaskFlag,'selectedGroups':selectedGroups,'current_user':request.user,'verifyUserFlag':verifyUserFlag,
+                'grpid':grpid ,'grpdata_member':grpdata_member,'data':mylist_data,'listAllMemberTask':listAllMemberTask,'grpAdmins':grpAdmins})
 
-        return render(request,'todoapp/group.html',
-            {'singleMemberTasksFlag':singleMemberTasksFlag,'selectedGroups':selectedGroups,'current_user':request.user,'member':member,'grpid':grpid,'verifyUserFlag':verifyUserFlag,
-            'grpdata_member':grpdata_member,'data':mylist_data,'singleMemberTasks':singleMemberTasks})
+        elif member == None: ##In this conditon group is selected by user and we required to show all data of that grp
+            listAllMemberTask = []
+            selectedGroups=GroupModel.objects.filter(grpid=grpid)
+            for x in selectedGroups:
+                listAllMemberTask.append(TaskAssignModel.objects.filter(assigned_to_id=x.id))
+
+            for x in listAllMemberTask:
+                if len(x) != 0:
+                    listAllMemberTaskFlag = True
+            return render(request,'todoapp/group.html',
+                {'listAllMemberTaskFlag':listAllMemberTaskFlag,'selectedGroups':selectedGroups,'current_user':request.user,'verifyUserFlag':verifyUserFlag,
+                'grpid':grpid,'grpdata_member':grpdata_member,'data':mylist_data,'listAllMemberTask':listAllMemberTask,'grpAdmins':grpAdmins})
+
+        else:##In this condition we are selecting the data of single user 
+            singleMemberTasks = []
+            selectedGroups=GroupModel.objects.filter(grpid=grpid)
+            userData = User.objects.all() 
+            for x in userData:
+                if str(x.username) == member:
+                    singleGroup=GroupModel.objects.filter(grpid=grpid,member=x)
+                    break
+
+            for x in singleGroup:
+                singleMemberTasks.append(TaskAssignModel.objects.filter(assigned_to_id=x.id))
+
+            for x in singleMemberTasks:
+                if len(x) != 0:
+                    singleMemberTasksFlag = True
+                    break
+
+            return render(request,'todoapp/group.html',
+                {'singleMemberTasksFlag':singleMemberTasksFlag,'selectedGroups':selectedGroups,'current_user':request.user,'member':member,'grpid':grpid,'verifyUserFlag':verifyUserFlag,
+                'grpdata_member':grpdata_member,'data':mylist_data,'singleMemberTasks':singleMemberTasks,'grpAdmins':grpAdmins})
     
+    else:
+        return render(request,'todoapp/group.html',
+            {'noGroups':'True','current_user':request.user,'verifyUserFlag':verifyUserFlag,'data':mylist_data,'grpAdmins':grpAdmins})
 
         
 ###################################################################################################################################
@@ -344,6 +352,21 @@ def deleteGroupsView(request):
 def addMemberview(request,grpid=None,member=None):
     flag,memberFlag = False,True
 
+    if request.method == 'POST':
+        for x in request.POST:
+            if x.isnumeric():
+                groupMemeber = GroupModel.objects.get(id=x)
+                GroupModel.objects.get(id=x).delete()
+                deleteUser = User.objects.all()
+                for x in deleteUser:
+                    if str(x.username) == groupMemeber.member:
+                        mail_subject = 'You were removed from group ' + groupMemeber.group + '\nRemoved by ' + str(request.user) 
+                        send_mail('Removed From Group',mail_subject,'djangoemail2020@gmail.com' , [x.email] , fail_silently=False)
+                        print("Deleted Successfully")
+                        messages.info(request, 'Deleted Successfully')
+
+
+
     if member != None:
         ##This condition is written to check wether input field of username is empty or not
         ##If it is empty and user just click add button then due to this condition, no member will be added
@@ -359,6 +382,7 @@ def addMemberview(request,grpid=None,member=None):
         if flag == False:
                 userData = User.objects.all()   
                 grpAddMember = GroupModel.objects.filter(grpid=grpid)
+
 
                 for x in grpAddMember: 
                     created_by = x.created_by
@@ -393,7 +417,8 @@ def addMemberview(request,grpid=None,member=None):
     return redirect('/group/' + grpid)
     
 ###################################################################################################################################
-def addAdminView(request):
+@login_required
+def addAdminView(request,grpid=None):
     userExistFlag,userNotExistFlag = False,True
 
     if request.method == 'POST':
@@ -442,15 +467,7 @@ def addAdminView(request):
             if userNotExistFlag == True:
                 messages.info(request, 'No such username')
 
-
-
-    grpAdmins = GroupAdminsModel.objects.all()
-    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
-    task_flag_update(request.user)
-    #This function is used to check personal task due time. 
-
-    return render(request,'todoapp/groupAdmin.html',{'grpAdmins':grpAdmins,'current_user':request.user,'data':mylist_data})
-
+    return redirect('/group/' + grpid)
 
  
 ######################This function is used to assign tasks to members######################################################

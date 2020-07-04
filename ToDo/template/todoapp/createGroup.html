@@ -19,15 +19,15 @@
     {% if grpdata_member %} <!-- grpdata_member contains all the groups of current logged in user -->
     <form action="/deleteGroups/" method="post">
              {%csrf_token%}
-    <table class="table table-bordered sortable" id="myTable" style="width: 60%;">
+    <table class="table ">
         <tr>
-          <th style="width: 110px">
+          <th >
                 <input type="checkbox" id="selecttodo" onclick="selectAll(this,document.getElementsByClassName('flag_group'))"><span style="padding-left:5px;">
                   <input type="submit" name="submit" class="btn btn-danger btn-sm" value="Delete">
                 </span>
               </th>
-          <th class ="grpSort">Group</th>
-          <th class ="created" >created By</th>
+          <th >Group</th>
+          <th >created By</th>
         </tr>
 
       {% for data in grpdata_member %}
@@ -36,7 +36,7 @@
           <td><input type="checkbox" class="flag_group"  name="group=={{data.grpid}}">
 
           <td class="group">
-          <a href="#">{{data.group}}</a>
+          {{data.group}}
           </td>
           <td class="admins" >
             {{data.created_by}}
@@ -56,38 +56,7 @@
         {% endfor %}
   {% endif %}
 	</div>
-<script >
-  function testfunction(){
-
-      console.log("hello");
-    var data1 = [
-        {%for data2 in data%}
-          "{{data2.date}}","{{data2.time}}",
-        {%endfor%}
-      ];
-    var task = [
-        {%for data2 in data%}
-          "{{data2.task}}",
-        {%endfor%}
-      ];
-
-      var timearr =[];
-    var i;
-  for(i=0;i<(data1.length)-1;){
-        timearr[timearr.length]=data1[i]+data1[i+1];
-        i +=2;
-      }
-
-      var alarmInfo = {};
-    
-      for (let i =0; i < timearr.length; i++) {
-        alarmInfo[timearr[i]+task[i]] = 'no';
-      }
-      
-      setInterval(function(){taskNotification(timearr,alarmInfo,task);}, 1000);  
-
-  }
-</script>
+{% include 'todoapp/alarmnotification.html' %}
 
 
 

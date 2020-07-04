@@ -1,0 +1,32 @@
+<script >
+  //This function is for notification of personal task
+  function testfunction(){
+
+    var data1 = [
+        {%for data2 in data%}
+          "{{data2.date}}","{{data2.time}}",
+        {%endfor%}
+      ];
+    var task = [
+        {%for data2 in data%}
+          "{{data2.task}}",
+        {%endfor%}
+      ];
+
+      var timearr =[];
+    var i;
+  for(i=0;i<(data1.length)-1;){
+        timearr[timearr.length]=data1[i]+data1[i+1];
+        i +=2;
+      }
+
+      var alarmInfo = {};
+    
+      for (let i =0; i < timearr.length; i++) {
+        alarmInfo[timearr[i]+task[i]] = 'no';
+      }
+      
+      setInterval(function(){taskNotification(timearr,alarmInfo,task);}, 1000);  
+
+  }
+</script>

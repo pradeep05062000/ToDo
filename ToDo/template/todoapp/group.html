@@ -13,7 +13,7 @@
         <div class="navbar-collapse collapse" id="navbar2">
             <ul class="navbar-nav">
                 <li class="nav-item ">
-                      {% if grpdata_member %}	<!-- grpdata_member contains all the groups related too current user-->
+                      {% if not noGroups %}	
           						<select class="form-control" id ="select-group" onchange="window.location.href=this.value">
           							{% for data in grpdata_member %}
           						    <option value="/group/{{data.grpid}}">{{data.group}}</option>
@@ -22,18 +22,18 @@
           					{% endif %}
                 </li>&nbsp&nbsp&nbsp
                 <li class="nav-item">
-                      {% if selectedGroups %}	
-                            <!-- selectedGroup contains all the objects of group(in use)(means all member of group(in use)) -->
+                      {% if not noGroups %}	
+                            
                 						<select class="form-control" id ="select-member" onchange="window.location.href=this.value">
                 							<option value="/group/{{grpid}}"  selected>All members</option>
-                							{% for data in selectedGroups %}
+                							{% for data in selectedGroups %}<!-- selectedGroup contains all the objects of group(in use)(means all member of group(in use)) -->
                 						    <option value="/group/{{data.grpid}}/{{data.member}}">{{data.member}}</option>
                 						  {% endfor %}
                 						</select>
           					{% endif %}
                 </li>&nbsp&nbsp&nbsp
                 <li class="nav-item" style="padding-top: 4px;">
-                      	{%if grpid%} <!-- It contains the grpid of group (in use) -->
+                      	{%if not noGroups %} <!-- It contains the grpid of group (in use) -->
       					<a href="" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createtaskmodalform">Create Task&nbsp<i class="fa fa-plus"></i></a>
                       	{%endif%}
 				        </li>
@@ -45,13 +45,13 @@
                           <span style="color: black;">Admin Settings</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      {%if grpid%}
+                      {%if not noGroups%}
                         <a href=" " class="dropdown-item" data-toggle="modal" data-target="#addmembermodalform" >Add member</a>
                       {% endif %}
                     <div class="dropdown-divider"></div>
                           <a class="dropdown-item" href="/createGroup">Edit Group</a>
                     <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/groupAdmin">Add Admin</a>
+                        <a class="dropdown-item" href=" " data-toggle="modal" data-target="#groupadmin">Add Admin</a>
                     </div>
                   {% endif %}
                 </li>
@@ -64,9 +64,10 @@
 	
 	
 	<div>
-		{% if not grpid %} <!-- It checks that current user is member of any group or not -->
-		<h3>You don't have any group</h3>
-		{% endif %}
+		{% if noGroups %} <!-- It checks that current user is member of any group or not -->
+		<br><br><br>
+    <h3>You don't have any group</h3>
+		{% else %}
 		{% if listAllMemberTaskFlag  %} <!-- This checks all member are selected from group or not -->
 			<table class="table">
 				<tr>
@@ -115,87 +116,10 @@
 		{% endif %}
 	</div>
 
-
-
-
-<div class="container my-4">
-
-    <div class="modal fade" id="addmembermodalform" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Add Member</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-       <label data-error="wrong" data-success="right" for="form3">Username</label>
-          <input type="text" id="member" class="form-control validate">
-        </div>
-
-      </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <a href="" onclick="this.href='/addmember/{{grpid}}/'+ document.getElementById('member').value" class = "btn btn-primary btn-sm">Add</a>
-      </div>
-    </div>
-  </div>
-</div>
-  </div>
-
-
-
-
-
-<div class="container my-4">
-
-    <div class="modal fade" id="createtaskmodalform" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Assign Task</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form method="post" action="/createtask/{{grpid}}/">
-		{% csrf_token %}
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-       <label data-error="wrong" data-success="right" for="form1">Task</label>
-          <input type="text" id="form1" name="task" class="form-control validate" required>
-        </div>
-        <div class="md-form mb-5">
-       <label data-error="wrong" data-success="right" for="form2">Assign to</label>
-          <select name="member_id" class="form-control validate" required>
-            <option value="" disabled selected>Select Member</option>
-            {% for data in selectedGroups %}
-            <option value="{{data.id}}">{{data.member}}</option>
-            {% endfor%}
-    	</select>
-        </div>
-        <div class="md-form mb-5">
-       <label data-error="wrong" data-success="right" for="form3">Comment</label>
-           <textarea class="form-control validate" name="comment"  required></textarea>
-        </div>
-
-      </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <input type="submit"  value="Assign" class="btn btn-primary btn-sm">
-      </div>
-      </form>
-    </div>
-  </div>
-</div>
-  </div>
-
-
-
-
-
+{% endif %}
+{% include 'todoapp/groupaddmember.html' %} <!-- here we are including the data of page groupaddmember.html -->
+{% include 'todoapp/assigntask.html' %}
+{% include 'todoapp/groupAdmin.html' %}
 
 
 	<script >
@@ -206,7 +130,6 @@
         }
         function memberSelect(val1,val2) {
 			if(val2 != '') {
-				console.log("val2")
           document.getElementById("select-member").value = "/group/"+val1+"/"+val2;
       }
       		else
@@ -227,40 +150,8 @@
   {% endif %}
 	</div>
 
-<script >
-  //This function is for notification of personal task
-  function testfunction(){
 
-      console.log("hello");
-    var data1 = [
-        {%for data2 in data%}
-          "{{data2.date}}","{{data2.time}}",
-        {%endfor%}
-      ];
-    var task = [
-        {%for data2 in data%}
-          "{{data2.task}}",
-        {%endfor%}
-      ];
-
-      var timearr =[];
-    var i;
-  for(i=0;i<(data1.length)-1;){
-        timearr[timearr.length]=data1[i]+data1[i+1];
-        i +=2;
-      }
-
-      var alarmInfo = {};
-    
-      for (let i =0; i < timearr.length; i++) {
-        alarmInfo[timearr[i]+task[i]] = 'no';
-      }
-      
-      setInterval(function(){taskNotification(timearr,alarmInfo,task);}, 1000);  
-
-  }
-</script>
-
+{% include 'todoapp/alarmnotification.html' %}
 
 
 {%endblock%}

@@ -1,63 +1,51 @@
-
 <div class="container my-4">
 
-    <div class="modal fade" id="groupadmin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    <div class="modal fade" id="addmembermodalform" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Add Admin</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Add Member</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body mx-3">
-        <form method="post" action = "/groupAdmin/{{grpid}}/">
-        {% csrf_token %}
         <div class="md-form mb-5">
        <label data-error="wrong" data-success="right" for="form3">Username</label>
-          <input type="text" name="admin" required>
-           <input type="submit" value="Add" class="btn btn-primary btn-sm">
- 
+          <input type="text" id="member" >
+          <a href="" onclick="this.href='/addmember/{{grpid}}/'+ document.getElementById('member').value" class = "btn btn-primary btn-sm">Add</a>
         </div>
-      </form>
         <div  id="addmembertabel">
-    {% if grpAdmins %} <!-- grpAdmins contains all the admins of from Admin Model -->
-    <form  method="post" action = "/groupAdmin/{{grpid}}/">
+          {% if selectedGroups %} <!-- grpdata_member contains all the groups of current logged in user -->
+    <form action="/addmember/{{grpid}}/" method="post">
              {%csrf_token%}
-    <table class="table">
+    <table class="table"  >
         <tr>
           <th >
                 <input type="checkbox" id="selecttodo" onclick="selectAll(this,document.getElementsByClassName('flag_group'))"><span style="padding-left:5px;">
                   <input type="submit" name="submit" class="btn btn-danger btn-sm" value="Delete">
                 </span>
               </th>
-          <th class ="grpSort">Admins</th>
+          <th >Users</th>
         </tr>
 
-      {% for data in grpAdmins %}
+      {% for data in selectedGroups %}
       
         <tr>
           <td><input type="checkbox" class="flag_group"  name="{{data.id}}">
-
-          <td >
-          {{data.adminUser}}
+          <td class="group">
+          {{data.member}}
           </td>
         </tr>
         
       {% endfor %}
     </table>
      </form>
-     {%endif%}
+     {%endif%}          
+        </div>
       </div>
     </div>
   </div>
 </div>
   </div>
-
-
-
-
-
-
-

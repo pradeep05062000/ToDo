@@ -79,6 +79,10 @@
 	padding-left: 10px;
 
 }
+.history-comment {
+	height: 500px;
+	overflow: scroll;
+}
 
 .createtask-btn {
 	top: 70px;
@@ -88,11 +92,9 @@
 }
 
 
-.addmember {
-	width: 500px;
-	margin-top: 70px;
-	margin-left: 500px; 
-	position: relative;
+#addmembertabel {
+	height: 200px;
+	overflow: scroll;
 }
 
 .taskassigned {

@@ -35,7 +35,6 @@ function taskNotification(timearr,alarmInfo,task){
   var current_date = anyDate.toShortFormat();
   var current_time = formatAMPM(new Date());
   var current_dt = current_date+current_time;
-  console.log("inside");
       for(i=0;i<(timearr.length);i++){
         if(current_dt == timearr[i]){
           if (alarmInfo[timearr[i]+task[i]] === "no") {

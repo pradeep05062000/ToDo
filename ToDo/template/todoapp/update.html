@@ -70,37 +70,8 @@
         {% endfor %}
   {% endif %}
 
-  <script >
-    //This function is used to select the value from select field which is already assigend 
-    function monthSelect(val) {
-          document.getElementById("create_month").value = String(Number(val));
-        }
-    function statusSelect(val) {
-          document.getElementById("select_status").value = val;
-        }
-    statusSelect("{{status}}");
-    monthSelect("{{month}}");
-  </script>
-<script >
-  function testfunction(){
-    
-    var data1 = [
-        {%for data2 in data%}
-          "{{data2.date}}","{{data2.time}}",
-        {%endfor%}
-      ];
-    var task = [
-        {%for data2 in data%}
-          "{{data2.task}}",
-        {%endfor%}
-      ];
-  
-      console.log('inside update');
-      var element;
-      element=setInterval(function(){taskNotification(data1,task,element);}, 20000);      
+  {% include 'todoapp/alarmnotification.html' %}
 
-  }
-</script>
 
 {% endblock %}
 

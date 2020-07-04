@@ -44,7 +44,6 @@ function form_check() {
     flag1=false;
     }
     else {
-      console.log(task);
       document.getElementById("valid_task").innerHTML = '';
       flag1 = true;
     }

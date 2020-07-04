@@ -1,0 +1,42 @@
+<div class="container my-4">
+
+    <div class="modal fade" id="createtaskmodalform" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Assign Task</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" action="/createtask/{{grpid}}/">
+		{% csrf_token %}
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+       <label data-error="wrong" data-success="right" for="form1">Task</label>
+          <input type="text" id="form1" name="task" class="form-control validate" required>
+        </div>
+        <div class="md-form mb-5">
+       <label data-error="wrong" data-success="right" for="form2">Assign to</label>
+          <select name="member_id" class="form-control validate" required>
+            <option value="" disabled selected>Select Member</option>
+            {% for data in selectedGroups %}
+            <option value="{{data.id}}">{{data.member}}</option>
+            {% endfor%}
+    	</select>
+        </div>
+        <div class="md-form mb-5">
+       <label data-error="wrong" data-success="right" for="form3">Comment</label>
+           <textarea class="form-control validate" name="comment"  required></textarea>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <input type="submit"  value="Assign" class="btn btn-primary btn-sm">
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+  </div>
