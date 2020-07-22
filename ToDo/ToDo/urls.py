@@ -21,7 +21,6 @@ from todoapp import urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/logout/',auth_views.LogoutView.as_view(template_name='registration/logout.html')),
-    path('accounts/login/',auth_views.LoginView.as_view(template_name='registration/login.html')),
     path('accounts/',include('django.contrib.auth.urls')),
     path('',include(urls))
 ]

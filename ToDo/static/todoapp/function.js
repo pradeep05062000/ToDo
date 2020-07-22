@@ -1,4 +1,12 @@
-
+/* This function is used to show password   */
+function showPassword() {
+  var x = document.getElementById("myInput");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
 
 /* This function is use to select all the check box */
 

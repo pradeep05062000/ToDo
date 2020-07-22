@@ -11,6 +11,8 @@ from todoapp.supporting_python import task_detail_modifed,task_flag_update,histo
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.http import JsonResponse
 from django.core.mail import send_mail
+from django.contrib.auth import authenticate,login
+
 
 # Create your views here.
 
@@ -29,7 +31,22 @@ def signup_view(request):
 
     return render(request,'todoapp/signup.html',{'form':form})   ########### 'render()'  function insert the context inside template('signup.html')
 ############################################################################################################
-@login_required            
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.info(request, f"You are now logged in as {username}")
+            return redirect('/')
+        else:
+             messages.error(request, "Invalid username or password.")
+    
+    return render(request,"todoapp/login.html")
+
+
+@login_required(login_url='/login')           
 def mylist_view(request,mylist_choice): 
 ##'mylist_choice' parameter was added to know which page has been selected by end user from 'mylist','todo','inProgress','done'
 
@@ -63,7 +80,7 @@ def mylist_view(request,mylist_choice):
 
 
 ##############################################################################################################################
-@login_required
+@login_required(login_url='/login')
 def reset_password_view(request):
 
     
@@ -92,7 +109,7 @@ def reset_password_view(request):
 
 #######################Following view is used to create the personal tasks ###############################################
 
-@login_required                 #################################login_required is the decorater use to restrict the user to go in that page before authenticating itself .
+@login_required(login_url='/login')                 #################################login_required is the decorater use to restrict the user to go in that page before authenticating itself .
 def todo_create_view(request):
     
     if request.method=='POST':
@@ -121,7 +138,7 @@ def todo_create_view(request):
 
 
 #############################This function is used to update the the task #####################################
-@login_required
+@login_required(login_url='/login')
 def updatelist_view(request,id):
     #error=False
     if request.method=='POST':
@@ -200,7 +217,7 @@ def task_detail_view(request,id):
     
 
 ####################This function is used to Show the group details#########################################################################
-@login_required
+@login_required(login_url='/login')
 def groupview(request,grpid=None,member=None):
 
     listAllMemberTaskFlag,singleMemberTasksFlag = False,False 
@@ -290,7 +307,7 @@ def groupview(request,grpid=None,member=None):
 
         
 ###################################################################################################################################
-@login_required
+@login_required(login_url='/login')
 def createGroupview(request):
 
     if request.method == 'POST':
@@ -354,7 +371,7 @@ def deleteGroupsView(request):
 
 
 #####################################This function is used to add members in group#############################
-@login_required
+@login_required(login_url='/login')
 def addMemberview(request,grpid=None,member=None):
     flag,memberFlag = False,True
 
@@ -422,7 +439,7 @@ def addMemberview(request,grpid=None,member=None):
     return redirect('/group/' + grpid)
     
 ###################################################################################################################################
-@login_required
+@login_required(login_url='/login')
 def addAdminView(request,grpid=None):
     userExistFlag,userNotExistFlag = False,True
 
@@ -476,7 +493,7 @@ def addAdminView(request,grpid=None):
 
  
 ######################This function is used to assign tasks to members######################################################
-@login_required
+@login_required(login_url='/login')
 def createtaskview(request,grpid=None):
 
 
@@ -512,7 +529,7 @@ def createtaskview(request,grpid=None):
     return redirect('/group/'+ grpid )
 
 #######################################################################################################################################
-@login_required
+@login_required(login_url='/login')
 def updateAssignedTaskView(request,id=None,grpid=None,activityOption=None):
     historyFlag = False
     updateTask = TaskAssignModel.objects.get(id=id)

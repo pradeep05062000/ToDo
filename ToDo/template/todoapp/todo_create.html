@@ -70,6 +70,14 @@
     </script>   
     {%endif%}
 
+    {% if messages %}
+    {% for message in messages %}
+      <script>
+          alert("{{message}}");
+        </script>
+    {% endfor %}
+  {% endif %}
+
 {% include 'todoapp/alarmnotification.html' %}
 
 {%endblock%}

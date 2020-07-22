@@ -7,6 +7,7 @@ from todoapp import views as v1
 urlpatterns = [
     path('',v1.todo_create_view),
     path('signup/',v1.signup_view),
+    path('login/',v1.login_view),
     path('group/',v1.groupview),
     path('reset/',v1.reset_password_view),
     path('accounts/profile/',v1.todo_create_view),
