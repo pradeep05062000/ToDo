@@ -262,7 +262,7 @@ def groupview(request,grpid=None,member=None):
             selectedGroups=GroupModel.objects.filter(grpid=grpid)
             userData = User.objects.all() 
             for x in userData:
-                if str(x.username) == member:
+                if x.username == member:
                     singleGroup=GroupModel.objects.filter(grpid=grpid,member=x)
                     break
 
@@ -293,7 +293,7 @@ def createGroupview(request):
             addGrp = GroupModel()
             allGroupData = GroupModel.objects.all()
             for data in allGroupData:
-                if data.created_by == str(request.user) and data.group == request.POST.get('group'):
+                if data.group == request.POST.get('group'):
                     flag = True
                     ##Here we are checking do group already exist or not, if yes flag will be True.
 
@@ -312,7 +312,7 @@ def createGroupview(request):
                 send_mail('New Group Created',mail_subject,'djangoemail2020@gmail.com' , [userAddMail.email] , fail_silently=False)
                 messages.success(request, 'Group created Successfully')
             else:
-                messages.info(request, 'You have already created group')
+                messages.info(request, 'Group already exist')
 
 
         else:
@@ -359,10 +359,9 @@ def addMemberview(request,grpid=None,member=None):
                 GroupModel.objects.get(id=x).delete()
                 deleteUser = User.objects.all()
                 for x in deleteUser:
-                    if str(x.username) == groupMemeber.member:
+                    if x.username == str(groupMemeber.member):
                         mail_subject = 'You were removed from group ' + groupMemeber.group + '\nRemoved by ' + str(request.user) 
                         send_mail('Removed From Group',mail_subject,'djangoemail2020@gmail.com' , [x.email] , fail_silently=False)
-                        print("Deleted Successfully")
                         messages.info(request, 'Deleted Successfully')
 
 
@@ -395,7 +394,7 @@ def addMemberview(request,grpid=None,member=None):
                 addMember.created_by = created_by
                 addMember.group = group
                 for x in userData:
-                    if str(x.username) == member:
+                    if x.username == member:
                         #This step verification is done , because we don't know which object in  user data contains the provided user name
                         #And if we dont find the provide user name memberFlag will remain True, which means know such user exist.
 
@@ -435,7 +434,7 @@ def addAdminView(request,grpid=None):
         allUserObject = User.objects.all()
 
         for x in allUserObject:
-            if str(x.username) == request.POST.get('admin'):
+            if x.username == request.POST.get('admin'):
                 userObject = User.objects.get(username=x.username)
                 userNotExistFlag = False
                 #Here using for loop and if condition we are checking do provided username by end user exist or not in User Model
@@ -567,11 +566,11 @@ def updateAssignedTaskView(request,id=None,grpid=None,activityOption=None):
 
             assigned_to_userFlag,assigned_by_userFlag = False,False 
             for userData in allUsers:
-                if str(userData.username) == updateTask.assigned_to_name :
+                if userData.username == updateTask.assigned_to_name :
                     assigned_to_user = User.objects.get(username=userData.username)
                     assigned_to_userFlag = True
 
-                if str(userData.username) == updateTask.assigned_by :
+                if userData.username == updateTask.assigned_by :
                     assigned_by_user = User.objects.get(username=userData.username)
                     assigned_by_userFlag =True
 
