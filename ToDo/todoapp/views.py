@@ -215,6 +215,12 @@ def groupview(request,grpid=None,member=None):
     verifyUserFlag = verifyGroupAdmin(str(request.user))
     grpdata = GroupModel.objects.filter(member=request.user)
     ## We are retriving all the group associated with the current user
+
+    if request.method == 'POST':
+        for x in request.POST:
+            if x.isnumeric():
+                TaskAssignModel.objects.get(id=x).delete()
+
            
 
 
@@ -513,7 +519,7 @@ def updateAssignedTaskView(request,id=None,grpid=None,activityOption=None):
     #This is object which we are going to update in steps below
     allfiles = GroupTaskAttachmentsModel.objects.filter(fileTask_id=id)
     #Here we are retrieving all the files attached with this  object (updateTask)
-    #The fileTask_id is the foreign key connected to TaskAssigenModel
+    #The fileTask_id is the foreign key connected to TaskAssignModel
     allLinks = GroupTaskWebLinkModel.objects.filter(linkTask_id=id)
     #Same for all the link attach to task
     grp_member = GroupModel.objects.filter(grpid=grpid)
