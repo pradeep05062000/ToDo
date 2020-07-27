@@ -5,7 +5,9 @@ from django.urls import path,re_path
 from todoapp import views as v1            
 
 urlpatterns = [
-    path('',v1.todo_create_view),
+    path('',v1.mylist_view),
+    path('create/',v1.todo_create_view),
+    path('update/',v1.description_view),
     path('signup/',v1.signup_view),
     path('login/',v1.login_view),
     path('group/',v1.groupview),
@@ -25,10 +27,7 @@ urlpatterns = [
     re_path(r'^createtask/(?P<grpid>[\w\s]+)/$',v1.createtaskview),
     re_path(r'^updateAssignedTask/(?P<id>[\d]+)/(?P<grpid>[\w\s]+)/$',v1.updateAssignedTaskView),
     re_path(r'^updateAssignedTask/(?P<id>[\d]+)/(?P<grpid>[\w\s]+)/(?P<activityOption>[\w-]+/$)',v1.updateAssignedTaskView),
-    re_path(r'(?P<id>[\d]+)/description',v1.description_view),
-    re_path(r'(?P<id>[\d]+)/summary',v1.summary_view),
-    re_path(r'(?P<id>[\d]+)/detail',v1.task_detail_view),
-    re_path(r'(?P<id>[\d]+)/update',v1.updatelist_view),
+    re_path(r'(?P<id>[\d]+)/(?P<seleted_option>[\w\s]+)/description',v1.description_view),
 
 ]
 

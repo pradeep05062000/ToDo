@@ -3,9 +3,9 @@
     <div class="modal fade" id="addmembermodalform" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Add Member</h4>
+    <div class="modal-content" style="background-color: #f1f1f1;">
+      <div class="modal-header text-center" style="background-color: #3b6e86; color: white;">
+        <h4 class="modal-title w-100 ">Add Member</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -16,7 +16,7 @@
           <input type="text" id="member" >
           <a href="" onclick="this.href='/addmember/{{grpid}}/'+ document.getElementById('member').value" class = "btn btn-primary btn-sm">Add</a>
         </div>
-        <div  id="addmembertabel">
+        <div  id="addmembertabel" style="background-color: white;">
           {% if selectedGroups %} <!-- grpdata_member contains all the groups of current logged in user -->
     <form action="/addmember/{{grpid}}/" method="post">
              {%csrf_token%}

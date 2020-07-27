@@ -1,26 +1,19 @@
 
-.i-am-centered {
-  margin-left: 40%;
-    max-width: 300px;
-    margin-top: 8%;
-    padding: 10px 10px 10px 20px;
-    border: 2px solid grey;
-    opacity: .85;
-    font-weight: bold;
-    border-radius:15px 15px 0px 0px ;
-
-}
-
 .summary{
-  margin-left: 40%;
+  margin-left: 35%;
     max-width: 400px;
     margin-top: 8%;
-    padding: 10px 10px 10px 20px;
-    border: 2px solid grey;
-    opacity: .85;
-    font-weight: bold;
-    border-radius:15px 15px 0px 0px ;
+    background-color: #f1f1f1;
+    
 
+}
+.summary .common-heading {
+  height: 50px;
+  text-align: center;
+  color: white;
+  font-size: 25px;
+  padding:8px 0px;
+  background-color: #3b6e86
 }
 .summary_detail_btn {
   position: relative;
@@ -31,9 +24,7 @@
 
 .mylist{
     width: 70%;
-    top: 57px;
-    margin-left: 300px;
-    position: absolute;
+    margin-left: 16%;
 }
 
 
@@ -50,6 +41,40 @@
   top: 40%;
 }
 
+.customTable {
+  width: 100% ; 
+  border-collapse: collapse;
+  margin-right: 50px;
+
+  
+}
+.customTable td, .customTable th {
+  border: 1px solid #ddd;
+  padding: 3px;
+  
+}
+
+.customTable th {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: left;
+  background-color: #3b6e86;
+  color: white;
+}
+.customTable tr:nth-child(even){background-color: #ffffff;}
+.customTable tr:nth-child(odd){background-color: #f1f1f1;}
+
+.customTable tr:hover {background-color: #ddd;}
+
+#myTable {
+  margin-left: 2%;
+  max-width: 95%;
+  position: absolute;
+}
+
+#myTable td, #myTable th {
+  cursor: pointer;
+}
 
 
 .mylist_sort {
@@ -66,79 +91,12 @@
   color: white;
 }
 
-.external_task_detail{
-  position: absolute;
-  top:20% ;
-  left: 30%;
-  
-}
-.task_detail {
-  padding-top: 2%;
-  padding-right: 1%;
-  padding-left: 1.5rem;
-  border-bottom: 1px solid #D3D3D3;
-  border-left: 6px solid black;
-  border-spacing: 20%;
-  
+.description-activity-outer {
+  height: 400px;
+  overflow: scroll;
 }
 
-.detail_discription{
-
-  width: 30%;
-  padding: 3%;
-  position:absolute;
-  top: 30%;
-   right:2%;
-  background-color: #D3D3D3;
-  text-align: center;
-
-}
-
-
-
-
-body {
-  overflow-x: hidden;
-  
-}
-
-#sidebar-wrapper {
-  min-height: 100vh;
-  margin-left: -15rem;
-  -webkit-transition: margin .25s ease-out;
-  -moz-transition: margin .25s ease-out;
-  -o-transition: margin .25s ease-out;
-  transition: margin .25s ease-out;
-}
-
-#sidebar-wrapper .sidebar-heading {
-  padding: 30px 20px;
-  font-size: 1.2rem;
-}
-
-#sidebar-wrapper .list-group {
-  width: 15rem;
-}
-
-#page-content-wrapper {
-  min-width: 100vw;
-}
-
-#wrapper.toggled #sidebar-wrapper {
-  margin-left: 0;
-}
-
-@media (min-width: 768px) {
-  #sidebar-wrapper {
-    margin-left: 0;
-  }
-
-  #page-content-wrapper {
-    min-width: 0;
-    width: 100%;
-  }
-
-  #wrapper.toggled #sidebar-wrapper {
-    margin-left: -15rem;
-  }
+.description-activity {
+  border-left: 8px solid #3b6e86;
+  border-bottom: 1px solid lightgrey;
 }

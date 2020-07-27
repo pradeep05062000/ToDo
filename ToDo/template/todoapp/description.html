@@ -3,18 +3,29 @@
 
 {% block body_block %}
 {{ block.super }} 
+<div class="sticky-top">
+    <nav class="navbar navbar-expand-sm navbar-light bg-light ">
+      <div class="container">
+        <div class="navbar-collapse collapse" id="navbar2">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item ">
+                  <a href=" " class="btn btn-primary btn-sm" data-toggle="modal" data-target="#update-task">Update Task</a> 
+                </li>
+            </ul>
+        </div>
+        </div>
+    </nav>
+</div>
 
-      
 <div class="mylist">
   <br><br>
-  <a href="/{{id}}/summary" class="btn btn-primary">Summary</a>
-  <a href="/{{id}}/update" class="btn btn-primary">Update</a><br><br>
-  <table  class="table table-bordered sortable" style="width: 70%">
-    <thead class="thead-light">
+  <table  class="customTable" >
+    <thead >
       <tr>
         <th>Task</th>
         <th>Due Date</th>
         <th>Due Time</th>
+        <th>Status</th>
         <th>Description</th>
       </tr>
     </thead>
@@ -22,6 +33,7 @@
           <td>{{task}}</a></td>
           <td>{{date}}</td>
           <td>{{time}}</td>
+          <td>{{status}}</td>
           {% if description != '' %}
               <td>{{description|linebreaks}}</td>
           {% else %}
@@ -30,43 +42,66 @@
 
         </tr>
     </table><br>
-    
-    <div style="border-bottom: 2px solid grey; width:70%; "></div><br>
+    <hr>
+    <p style="font-size: 25px;">Activity</p>
+      <select id="select-option" class="form-control" onchange="window.location.href=this.value">
+        <option value='/{{id}}/description/description' selected>Description</option>
+        <option value='/{{id}}/summary/description'>Summary</option>
+        <option value='/{{id}}/more_detail/description'>More Details</option>
+      </select>
+    <br>
 
-    <div class="task_description">
-    <table class="table" style="width: 70%">
-      <tr>
-        <th >Description Details</th>
-        <th >Date&Time</th>
-      </tr>
+    <div class="description-activity-outer">
       {%for data in description_data%}<!-- This contains all the record of selected task -->
-        <tr>
-          {% if data.description_summary != '' %}
-            <script type="text/javascript">
-            </script>
-            {% if data.description_summary != 'None' %}
-            <script type="text/javascript">
-            </script>
-             <td>{{data.description_summary|linebreaks}}</td>
-             <td>{{data.dateTime}}</td>
-             {% endif %}
-          {% else %}
-            
-            <td>-&nbsp&nbsp(empty)</td>
-            <td>{{data.dateTime}}</td>
-            
-          {% endif %}
-
-        </tr>
+           <div class="description-activity">
+            {% if  seleted_option == 'description' %}
+                {% if data.description_summary != '' %}        
+                  {% if data.description_summary != 'None' %}
+                   {{data.description_summary|linebreaks}}
+                   <p style="font-weight: bold;">{{data.dateTime}}</p>
+                   {% endif %}
+                {% else %}
+                  -&nbsp&nbsp(empty)
+                   <p style="font-weight: bold;">{{data.dateTime}}</p>   
+                {% endif %}
+            {% endif %}
+            {% if seleted_option == 'summary'%}
+                {% if data.created_update != None %}
+                    {{data.created_update |linebreaks}} 
+                     <p style="font-weight: bold;">{{data.dateTime}}</p>
+                {% endif%}
+            {% endif %}
+            {% if seleted_option == 'more_detail' %}
+                {% if data.modefied_detail != None %}
+                  {{data.modefied_detail|linebreaks}}
+                {% endif %}
+            {% endif %}
+           </div>
       {%endfor%}
-    </table>
+    </div>
+<br><br>
+</div>
 
-</div>
-</div>
+<script >
+  function selectOption(val,id) {
+    console.log(val);
+  document.getElementById("select-option").value = "/" + id + "/" + val + "/" + "description";
+  }
+  selectOption('{{seleted_option}}',{{id}});
+</script>
 
 
 {% include 'todoapp/alarmnotification.html' %}
 
+{% include 'todoapp/update.html' %}
+
+{% if messages %}
+    {% for message in messages %}
+      <script>
+          alert("{{message}}");
+        </script>
+    {% endfor %}
+  {% endif %}
 
 
  {%endblock%}

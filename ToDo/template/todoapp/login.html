@@ -13,20 +13,29 @@
 
 {% block body_block %}
 
-  <div class="i-am-centered">
+  <div class="custom-login-form">
   <form method="post">
     {% csrf_token %}
-  	<legend>Login </legend>
+    <div class="custom-login-form-header">Login</div>
+    <div class="custom-login-form-body">
     <label>Username*</label>
     <input type="text" name="username" class="form-control">
     <label>Password*</label>
     <input type="password" id="myInput" name="password" class="form-control">
     <input type="checkbox"  onclick="showPassword()">Show Password
-    <br>
+    <br><br>
     <input type="submit" class="btn btn-success" value="Login">
   </form>
+  </div>
 </div>
 
+{% if messages %}
+    {% for message in messages %}
+      <script>
+          alert("{{message}}");
+        </script>
+    {% endfor %}
+  {% endif %}
 
 {%endblock%}
 

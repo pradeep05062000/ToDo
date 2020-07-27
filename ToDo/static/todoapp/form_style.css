@@ -1,3 +1,47 @@
+body {
+    font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+    font-size: 15px;
+    background-color: #f8f8f8;
+}
+
+
+.custom-signup-form {
+  margin-left: 35%;
+    max-width: 300px;
+    margin-top: 8%;
+    background-color: #f1f1f1;
+}
+.custom-signup-form-header {
+  height: 50px;
+  text-align: center;
+  color: white;
+  font-size: 25px;
+  padding:8px 0px;
+  background-color: #3b6e86
+}
+.custom-signup-form-body {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 50px;
+}
+
+.custom-login-form {
+  margin-left: 35%;
+    max-width: 300px;
+    margin-top: 8%;
+    background-color: #f1f1f1;
+}
+.custom-login-form-header {
+  height: 50px;
+  text-align: center;
+  color: white;
+  font-size: 25px;
+  padding:8px 0px;
+  background-color: #3b6e86
+}
+.custom-login-form-body {
+    padding: 10px;
+}
 .form_create {
   	margin-left: 400px;
     max-width: 500px;
@@ -9,18 +53,22 @@
     border-radius:15px 15px 0px 0px ;
 
 }
-.mylist-update-form {
-
-	margin-left: 400px;
-    max-width: 500px;
-    margin-top: 60px;
-    padding: 10px 10px 10px 20px;
-    border: 2px solid grey;
-    opacity: .85;
-    font-weight: bold;
-    border-radius:15px 15px 0px 0px ;
-   
-
+.reset-password-form {
+	margin-left: 40%;
+    max-width: 300px;
+    margin-top: 10%;
+    background-color: #f1f1f1;
+}
+.reset-password-form-header {
+  height: 50px;
+  text-align: center;
+  color: white;
+  font-size: 25px;
+  padding:8px 0px;
+  background-color: #3b6e86
+}
+.reset-password-form-body {
+    padding: 5px 40px;
 }
 
 .day_style {
@@ -61,3 +109,14 @@
 #select_status{
 	width:86%;
 }
+
+#valid_task {
+    color: red;
+}
+#valid_date {
+    color: red;
+}
+#valid_time {
+    color: red;
+}
+

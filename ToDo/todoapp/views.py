@@ -27,7 +27,7 @@ def signup_view(request):
             user=form.save()                     #############this saves the data in database
             user.set_password(user.password)     #######'set_password' method converts the raw password in to hashed password(encrypted) 'user.password' this contains the raw password
             user.save()                          #############this saves the data in database
-            return HttpResponseRedirect('/accounts/login')          ######here we redirect path '/accounts/login' url
+            return HttpResponseRedirect('/login')          ######here we redirect path '/accounts/login' url
 
     return render(request,'todoapp/signup.html',{'form':form})   ########### 'render()'  function insert the context inside template('signup.html')
 ############################################################################################################
@@ -47,7 +47,7 @@ def login_view(request):
 
 
 @login_required(login_url='/login')           
-def mylist_view(request,mylist_choice): 
+def mylist_view(request,mylist_choice=None): 
 ##'mylist_choice' parameter was added to know which page has been selected by end user from 'mylist','todo','inProgress','done'
 
     data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
@@ -58,24 +58,30 @@ def mylist_view(request,mylist_choice):
             if x.isnumeric():                               #
                 ToDoModel.objects.get(id=x).delete()        #######
 
-    if mylist_choice == 'mylist':
-        alldata=ToDoModel.objects.filter(user=request.user)
-        return render(request,'todoapp/mylist.html',{'data':data,'alldata':alldata,'current_user':request.user})
-        ##'data' parameter is used to send the data for task notification 
-        ##'alldata' parameter used to send all task of end user and same for 'todo','in progress' and 'done' tasks
-
-    elif mylist_choice=='todo':
+    if mylist_choice=='todo':
         data_todo=ToDoModel.objects.filter(user=request.user,status='todo')
-        return render(request,'todoapp/mylist.html',{'data':data,'alldata':data_todo,'current_user':request.user,'todo':True})
+        return render(request,'todoapp/mylist.html',
+            {'data':data,'alldata':data_todo,'current_user':request.user,'status':'todo'})
 
     elif mylist_choice == 'inProgress':
         data_inprogress = ToDoModel.objects.filter(user=request.user,status='inProgress')
-        return render(request,'todoapp/mylist.html',{'data':data,'alldata':data_inprogress,'current_user':request.user,'inProgress':True})
+        return render(request,'todoapp/mylist.html',
+            {'data':data,'alldata':data_inprogress,'current_user':request.user,'status':'inProgress'})
 
     elif mylist_choice == 'done':
         data_done = ToDoModel.objects.filter(user=request.user,status='done')
-        return render(request,'todoapp/mylist.html',{'data':data,'alldata':data_done,'current_user':request.user,'done':True})
+        return render(request,'todoapp/mylist.html',
+            {'data':data,'alldata':data_done,'current_user':request.user,'status':'done'})
     
+    else:
+        alldata=ToDoModel.objects.filter(user=request.user)
+        return render(request,'todoapp/mylist.html',
+            {'data':data,'alldata':alldata,'current_user':request.user,'status':'mylist'})
+        ##'data' parameter is used to send the data for task notification 
+        ##'alldata' parameter used to send all task of end user and same for 'todo','in progress' and 'done' tasks
+
+
+
 ##############################################################################################################################
 
 
@@ -113,34 +119,29 @@ def reset_password_view(request):
 def todo_create_view(request):
     
     if request.method=='POST':
-            mylist_data=ToDoModel()  
-            mylist_data.task=request.POST.get('task') 
-            mylist_data.date=datetime(int(request.POST.get('year')),int(request.POST.get('month')),int(request.POST.get('day'))).date()
-            mylist_data.time=time(int(request.POST.get('hour')),int(request.POST.get('min')))
-            mylist_data.description=request.POST.get('description') 
-            mylist_data.flagTask = "no"
-            mylist_data.user=request.user
-            mylist_data.save() 
+        mylist_data=ToDoModel()  
+        mylist_data.task=request.POST.get('task') 
+        mylist_data.date=datetime(int(request.POST.get('year')),int(request.POST.get('month')),int(request.POST.get('day'))).date()
+        mylist_data.time=time(int(request.POST.get('hour')),int(request.POST.get('min')))
+        mylist_data.description=request.POST.get('description') 
+        mylist_data.flagTask = "no"
+        mylist_data.user=request.user
+        mylist_data.save() 
+        summary=SummaryModel()  
+        summary.taskId=mylist_data          ##################### Here we assigne the ToDoModel object id to taskId of SummaryModel
+        summary.dateTime=datetime.now()
+        summary.description_summary=request.POST.get('description')
+        summary.modefied_detail="created at {} {}".format(datetime.now().strftime("%b %d, %Y"),datetime.now().strftime("%I:%M %p").lower()) 
+        summary.created_update="created"
+        summary.save()    
 
-            summary=SummaryModel()  
-            summary.taskId=mylist_data          ##################### Here we assigne the ToDoModel object id to taskId of SummaryModel
-            summary.dateTime=datetime.now()
-            summary.description_summary=request.POST.get('description')
-            summary.modefied_detail="created at {} {}".format(datetime.now().strftime("%b %d, %Y"),datetime.now().strftime("%I:%M %p").lower()) 
-            summary.created_update="created"
-            summary.save()    
-
-            return redirect('/mylist/mylist')
-
-    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
-    task_flag_update(request.user)
-    return render(request,'todoapp/todo_create.html',{'current_user':request.user,'data':mylist_data})
+    return redirect('/')
 
 
-#############################This function is used to update the the task #####################################
-@login_required(login_url='/login')
-def updatelist_view(request,id):
-    #error=False
+##################This function is used to update tasks as well as show all the activites related task#########################################################################
+    
+def description_view(request,id=None,seleted_option=None):
+
     if request.method=='POST':
         mylist_data=ToDoModel.objects.get(id=id)
         summary=SummaryModel() 
@@ -183,38 +184,17 @@ def updatelist_view(request,id):
     data=ToDoModel.objects.get(id=id)
     date_listAllMemberTask=str(data.date).split('-')
     time_listAllMemberTask=str(data.time).split(':')
-    mylist_data =ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
-    task_flag_update(request.user)
-    return render(request,'todoapp/update.html',
-        {'current_user':request.user,"status":data.status,'description':data.description,'task':data.task,'day':int(date_listAllMemberTask[2]),
-        'month':date_listAllMemberTask[1],'year':int(date_listAllMemberTask[0]),'hour':time_listAllMemberTask[0],'min':time_listAllMemberTask[1]}) 
-
-
-##################This three function are used to show log of task in short/detail#########################################################################
-    
-def description_view(request,id):
-    data=ToDoModel.objects.get(id=id)
     description_data=SummaryModel.objects.filter(taskId=id)
     ##Here we are retreiving all the SummaryModel objects related to seleted task
-    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
-    task_flag_update(request.user)
-    return render(request,'todoapp/description.html',{"description_data":description_data,'id':id,'description':data.description,
-        'current_user':request.user,'task':data.task,'time':data.time,'date':data.date,'data':mylist_data}) 
 
-def summary_view(request,id):
-    data=ToDoModel.objects.get(id=id)
-    summary_data=SummaryModel.objects.filter(taskId=id)
-    mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
-    task_flag_update(request.user)
-    return render(request,'todoapp/summary.html',{'summary_data':summary_data,'current_user':request.user,'data':mylist_data,'task':data.task,'id':id})
 
-def task_detail_view(request,id):
-    data=ToDoModel.objects.get(id=id)
-    detail_data=SummaryModel.objects.filter(taskId=id)
     mylist_data=ToDoModel.objects.filter(user=request.user,status='todo',flagTask='no')
     task_flag_update(request.user)
-    return render(request,'todoapp/task_detail.html',{'detail_data':detail_data,'current_user':request.user,'data':mylist_data,'task':data.task,})
-    
+    return render(request,'todoapp/description.html',
+        {"description_data":description_data,'id':id,'description':data.description,'seleted_option':seleted_option,"status":data.status,
+        'task':data.task,'time':data.time,'date':data.date,'day':int(date_listAllMemberTask[2]),
+        'month':date_listAllMemberTask[1],'year':int(date_listAllMemberTask[0]),'hour':time_listAllMemberTask[0],
+        'min':time_listAllMemberTask[1],'current_user':request.user,'data':mylist_data})  
 
 ####################This function is used to Show the group details#########################################################################
 @login_required(login_url='/login')

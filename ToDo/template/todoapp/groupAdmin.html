@@ -4,9 +4,9 @@
     <div class="modal fade" id="groupadmin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Add Admin</h4>
+    <div class="modal-content" style="background-color: #f1f1f1;">
+      <div class="modal-header text-center" style="background-color: #3b6e86; color: white;">
+        <h4 class="modal-title w-100 ">Add Admin</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -21,7 +21,7 @@
  
         </div>
       </form>
-        <div  id="addmembertabel">
+        <div  id="addmembertabel" style="background-color: white;">
     {% if grpAdmins %} <!-- grpAdmins contains all the admins of from Admin Model -->
     <form  method="post" action = "/groupAdmin/{{grpid}}/">
              {%csrf_token%}

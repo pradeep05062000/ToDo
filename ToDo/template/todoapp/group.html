@@ -71,7 +71,7 @@
 		{% if listAllMemberTaskFlag  %} <!-- This checks all member are selected from group or not -->
 			<form method="post" >
         {% csrf_token %}
-      <table class="table">
+      <table class="customTable" id="grp-task">
 				<tr>
           <th style="width: 15%">
           <input type="checkbox" id="selecttodo" onclick="selectAll(this,document.getElementsByClassName('flag_mylist'))"><span style="margin-left: 20px"><input type="submit" name="submit" class="btn btn-danger btn-sm" value="Delete">
@@ -85,13 +85,13 @@
 				{% for j in i %}
 				<tr>
           <td><input type="checkbox" class="flag_mylist"  name="{{j.id}}">
-					<td>
+					<td onclick="window.location.href='/updateAssignedTask/{{j.id}}/{{grpid}}'">
 						{{j.assigned_to_name}}
 					</td>
-					<td>
-						<a href="/updateAssignedTask/{{j.id}}/{{grpid}}">{{j.task}}</a>
+					<td onclick="window.location.href='/updateAssignedTask/{{j.id}}/{{grpid}}'">
+						{{j.task}}
 					</td>
-					<td>
+					<td onclick="window.location.href='/updateAssignedTask/{{j.id}}/{{grpid}}'">
 						{{j.assigned_by}}
 					</td>
 				</tr>
@@ -105,7 +105,7 @@
 		{% elif singleMemberTasksFlag %} <!-- It check single user is selected from group or not-->
     <form method="post" >
       {% csrf_token %}
-			<table class="table">
+			<table class="customTable" id="grp-task">
 				<tr>
            <th style="width: 15%">
           <input type="checkbox" id="selecttodo" onclick="selectAll(this,document.getElementsByClassName('flag_mylist'))"><span style="margin-left: 20px"><input type="submit" name="submit" class="btn btn-danger btn-sm" value="Delete">
@@ -118,12 +118,12 @@
 				{% for j in i %}
 				<tr>
           <td><input type="checkbox" class="flag_mylist"  name="{{j.id}}">
-					<td>
-						<a href="/updateAssignedTask/{{j.id}}/{{grpid}}">{{j.task}}</a>
-					</td>
-					<td>
-						{{j.assigned_by}}
-					</td>
+					<td onclick="window.location.href='/updateAssignedTask/{{j.id}}/{{grpid}}'">
+            {{j.task}}
+          </td>
+          <td onclick="window.location.href='/updateAssignedTask/{{j.id}}/{{grpid}}'">
+            {{j.assigned_by}}
+          </td>
 				</tr>
 				{% endfor %}
 				{% endfor %}
@@ -136,6 +136,7 @@
 {% include 'todoapp/groupaddmember.html' %} <!-- here we are including the data of page groupaddmember.html -->
 {% include 'todoapp/assigntask.html' %}
 {% include 'todoapp/groupAdmin.html' %}
+
 
 
 	<script >

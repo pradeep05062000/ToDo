@@ -25,39 +25,41 @@ $(document).ready(function(){
 
 //This function is used to sort according to date
 $(document).ready(function(){
-  $(".second").click(function () {
-  	
-  	let s, hr, temp = 0, dateArr = []  ;
-  	var arr = $(".date").map( function() { 
-  		return $(this).text().replace(/\./g , '');
-  	});
-  	var timeArr = $(".time").map(function() {
-  		return $(this).text()
-  	});
-  	for(let i = 0; i < timeArr.length; i++) {
-  		s = timeArr[i];
-  		s = s.match(/(\d+)\:(\d+) (\w+\.\w+\.)/);
-  		hr =  /a.m./.test(s[3]) ? s[1] === "12" ? "00" : s[1] : s[1] === "12" ? "12" : (Number(s[1]) + 12).toString();
-  		dateArr.push(arr[i]+' ' + hr + ':' + s[2]); 
-  	}
-  	
-  	let rows = document.getElementById("myTable").rows;
+  $(".second").click(clickDateOrTime);
+});
 
-  	for(let j=0; j < dateArr.length; j++) {
-  		for(let i = 1; i < dateArr.length; i++) {
-    		if(new Date(dateArr[i-1]) > new Date(dateArr[i])) {
-    			temp = dateArr[i-1];
-    			dateArr[i-1] = dateArr[i];
-    			dateArr[i] = temp;
-    			rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
-    		}
-    	}
-  	}
-  	
-   	
-  });
+$(document).ready(function(){
+  $(".third").click(clickDateOrTime);
 });
 
 
+const clickDateOrTime = function () {
+    
+    let s, hr, temp = 0, dateArr = []  ;
+    var arr = $(".date").map( function() { 
+      return $(this).text().replace(/\./g , '');
+    });
+    var timeArr = $(".time").map(function() {
+      return $(this).text()
+    });
+    for(let i = 0; i < timeArr.length; i++) {
+      s = timeArr[i];
+      s = s.match(/(\d+)\:(\d+) (\w+\.\w+\.)/);
+      hr =  /a.m./.test(s[3]) ? s[1] === "12" ? "00" : s[1] : s[1] === "12" ? "12" : (Number(s[1]) + 12).toString();
+      dateArr.push(arr[i]+' ' + hr + ':' + s[2]); 
+    }
+    
+    let rows = document.getElementById("myTable").rows;
 
+    for(let j=0; j < dateArr.length; j++) {
+      for(let i = 1; i < dateArr.length; i++) {
+        if(new Date(dateArr[i-1]) > new Date(dateArr[i])) {
+          temp = dateArr[i-1];
+          dateArr[i-1] = dateArr[i];
+          dateArr[i] = temp;
+          rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
+        }
+      }
+    } 
+}
 

@@ -56,7 +56,7 @@ function form_check() {
       flag1 = true;
     }
 
-    if (isNaN(day) || isNaN(year) || year==='' || year === '0000' || day === '' || month === ''){
+    if (isNaN(day) || isNaN(year) || parseInt(year) === 0 || year === '' || day === '' || month === ''){
       text = "*Invalid Date";
       document.getElementById("valid_date").innerHTML = text;
       flag2 = false;

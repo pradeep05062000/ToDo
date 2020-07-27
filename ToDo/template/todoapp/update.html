@@ -1,13 +1,19 @@
-<!DOCTYPE html>
-{% extends "todoapp/base2.html" %}
 
-{% block body_block %} 
-{{ block.super }}
-    <div class="mylist-update-form" >
-       <form id="preventsubmit"  method="post">
-            <fieldset>
-                  <legend>Update Task</legend>
-                  {%csrf_token%}
+
+<!-- Modal -->
+<div class="modal fade" id="update-task" tabindex="-1" role="dialog" aria-labelledby="todo-create-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content " style="background-color: #f1f1f1;">
+      <div class="modal-header text-center" style="background-color: #3b6e86; color: white;">
+        <h4 class="modal-title w-100" >Update Task</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" id="preventsubmit" >
+          {% csrf_token %}  
+
                   <p style="font-size:18px;">Task:-<span style="font-style: italic; font-size:17px;">{{task}}</span></p>
                    <select class="form-control" id="select_status" name="status">
                          <option value="todo" >ToDo</option>
@@ -58,22 +64,29 @@
                   <label >Description  </label>
                   <textarea class="form-control" name="description" style="width:86%;">{{description}}</textarea>
                   <br>
-                  <input  onclick="form_check()" type="submit"  class="btn btn-primary" value="Update Task">
-
-            </fieldset>
+                  
       </form>
-    {% if messages %}
-        {% for message in messages %}
-          <script>
-            alert("{{message}}");
-          </script>
-        {% endfor %}
-  {% endif %}
+      <div class="modal-footer">
+              <input  onclick="form_check()" type="submit"  class="btn btn-primary" value="Update Task">
+            
+      </div>
+       </form>
+    </div>
+  </div>
+</div>
 
-  {% include 'todoapp/alarmnotification.html' %}
+      
+    <script >
+      function selectStatus(status) {
+        document.getElementById('select_status').value = status;
+      }
+      function selectMonth(month) {
+        document.getElementById('create_month').value = month;
+      }
 
-
-{% endblock %}
+       selectMonth({{month}});
+       selectStatus('{{status}}');
+    </script>
 
 
 

@@ -12,12 +12,14 @@
 {% endblock %}
 
 {% block body_block %}
-  <div class="i-am-centered">
+  <div class="custom-signup-form">
   <form method="post">
-  	<legend>Sign Up</legend>
+  	<div class="custom-signup-form-header"><legend>Sign Up</legend></div>
+    <div class="custom-signup-form-body">
     {{form|crispy}}<br>
     {%csrf_token%}
     <input type="submit" class="btn btn-success" value="SignUp">
   </form>
+  </div>
 </div>
 {%endblock%}

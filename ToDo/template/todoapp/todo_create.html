@@ -1,18 +1,21 @@
-<!DOCTYPE html>
-<!DOCTYPE html>
-{% extends "todoapp/base2.html" %}
 
-{% block body_block %}
-{{ block.super }}
-
-    <div class="form_create">
-       <form id="preventsubmit"  method="post">
-            <fieldset>
-                  <legend>Create Task</legend>
-                  {%csrf_token%}
-                  <label for="task">Task Name </label>
+<!-- Modal -->
+<div class="modal fade" id="todo-create" tabindex="-1" role="dialog" aria-labelledby="todo-create-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content " style="background-color: #f1f1f1;">
+      <div class="modal-header text-center" style="background-color: #3b6e86; color: white;">
+        <h4 class="modal-title w-100" >Create Task</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" id="preventsubmit" action="/create/">
+          {% csrf_token %}
+       
+                   <label for="task">Task Name </label>
                   <input type="text" class="form-control" name="task" id="task" style="width:86%;">
-                  <p id="valid_task"></p>
+                    <p id="valid_task"></p>
                   <br>
                   <label for="date">Due Date </label>
                   <br>
@@ -56,19 +59,17 @@
                   <label >Description  </label>
                   <textarea class="form-control" name="description" style="width:86%;"></textarea>
                   <br>
-                  <input  onclick="form_check()" type="submit"  class="btn btn-primary" value="Create Task">
-
-            </fieldset>
-      </form>
-
+       
+      </div>
+      <div class="modal-footer">
+              <input  onclick="form_check()" type="submit"  class="btn btn-primary" value="Create Task">
+      </div>
+       </form>
     </div>
-    <br><br><br>
+  </div>
+</div>
 
-    {%if error%}
-    <script type="text/javascript">
-      form_check();
-    </script>   
-    {%endif%}
+
 
     {% if messages %}
     {% for message in messages %}
@@ -78,7 +79,4 @@
     {% endfor %}
   {% endif %}
 
-{% include 'todoapp/alarmnotification.html' %}
-
-{%endblock%}
 
