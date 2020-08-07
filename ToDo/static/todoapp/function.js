@@ -103,6 +103,48 @@ function form_check() {
 }
 
 
+//This function is used to search 
+
+
+function search() {
+  var filter = document.getElementById("search").value.toLowerCase();
+  var tr = document.getElementsByClassName("rowUsedForSearch")
+  
+  
+  if(tr){
+    for (var i = 0; i < tr.length; i++) {
+      
+      data = tr[i].getElementsByTagName("td")
+      
+       td = [data[1].textContent.trim().toLowerCase() ];
+       td = td.concat([data[2].textContent.trim().toLowerCase()]);
+       if(data[3])
+        td = td.concat([data[3].textContent.trim().toLowerCase()]);
+        
+        if(filter.length === 0) {
+          tr[i].style.display = "none";
+        }
+
+        else{
+
+          for(let j=0; j<td.length; j++) {
+            if ((td[j].includes(filter)) || (filter === td[j])) {
+             tr[i].style.display = "";
+             break;
+             
+           } 
+          tr[i].style.display = "none";
+        }
+       
+      }
+     }
+   }
+  }
+  
+
+  
+
+
 
 
 

@@ -32,6 +32,12 @@
     </nav>
 </div><br>
 
+<div > 
+    <input style="float: left; width: 200px; margin-left: 30px;" type="text" name="search" id="search" class="form-control" placeholder="Search....">&nbsp
+    <button class="btn btn-outline-primary btn-sm" onclick="search()"><span style="font-size: 21px;" class="material-icons">search</span></button>
+    <br><br>
+  </div>
+
     {% if alldata %}
       <form method="post">
              {%csrf_token%}
@@ -49,7 +55,7 @@
             </tr>
              
             {%for alldata in alldata%}
-              <tr >
+              <tr class="rowUsedForSearch">
                 <td><input type="checkbox" class="flag_mylist"  name="{{alldata.id}}">
                 
                 </td>
@@ -64,12 +70,11 @@
     </form>
      
     {% else %}
-        <h1 id="notask">No Tasks Found</h1>
+        <h1 id="notask" style="color: grey;">No Tasks Found</h1>
     {% endif%}
       
 <script > 
   function selectStatus(status) {
-    console.log(status);
     document.getElementById("select-status").value = "/mylist/" + status;
   }
   selectStatus('{{status}}');

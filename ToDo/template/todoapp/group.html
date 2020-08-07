@@ -62,6 +62,12 @@
 </div><br>
 
 	
+  <div >
+   
+    <input style="float: left; width: 200px; margin-left: 30px;" type="text" name="search" id="search" class="form-control" placeholder="Search....">&nbsp
+    <button class="btn btn-outline-primary btn-sm" onclick="search()"><span style="font-size: 21px;" class="material-icons">search</span></button>
+    <br><br>
+  </div>
 	
 	<div>
 		{% if noGroups %} <!-- It checks that current user is member of any group or not -->
@@ -74,24 +80,24 @@
       <table class="customTable" id="grp-task">
 				<tr>
           <th style="width: 15%">
-          <input type="checkbox" id="selecttodo" onclick="selectAll(this,document.getElementsByClassName('flag_mylist'))"><span style="margin-left: 20px"><input type="submit" name="submit" class="btn btn-danger btn-sm" value="Delete">
-          </span>
-        </th>
-					<th>Assigned To</th>
-					<th>Task</th>
-					<th>Assigned By</th>
+              <input type="checkbox" id="selecttodo" onclick="selectAll(this,document.getElementsByClassName('flag_mylist'))"><span style="margin-left: 20px"><input type="submit" name="submit" class="btn btn-danger btn-sm" value="Delete"> 
+              </span>
+          </th>
+					<th class="assigned-to-title">Assigned To</th>
+					<th class="group-task-title">Task</th>
+					<th class="assigned-by-title">Assigned By</th>
 				</tr>
 				{% for i in listAllMemberTask %}
 				{% for j in i %}
-				<tr>
+				<tr class="rowUsedForSearch">
           <td><input type="checkbox" class="flag_mylist"  name="{{j.id}}">
-					<td onclick="window.location.href='/updateAssignedTask/{{j.id}}/{{grpid}}'">
+					<td class="assigned-to" onclick="window.location.href='/updateAssignedTask/{{j.id}}/{{grpid}}'">
 						{{j.assigned_to_name}}
 					</td>
-					<td onclick="window.location.href='/updateAssignedTask/{{j.id}}/{{grpid}}'">
+					<td class="group-task" onclick="window.location.href='/updateAssignedTask/{{j.id}}/{{grpid}}'">
 						{{j.task}}
 					</td>
-					<td onclick="window.location.href='/updateAssignedTask/{{j.id}}/{{grpid}}'">
+					<td class="assigned-by" onclick="window.location.href='/updateAssignedTask/{{j.id}}/{{grpid}}'">
 						{{j.assigned_by}}
 					</td>
 				</tr>
@@ -101,6 +107,7 @@
       </form>
 		
 	</div>
+
 	<div>
 		{% elif singleMemberTasksFlag %} <!-- It check single user is selected from group or not-->
     <form method="post" >
@@ -111,17 +118,17 @@
           <input type="checkbox" id="selecttodo" onclick="selectAll(this,document.getElementsByClassName('flag_mylist'))"><span style="margin-left: 20px"><input type="submit" name="submit" class="btn btn-danger btn-sm" value="Delete">
           </span>
         </th>
-					<th>Task</th>
-					<th>Assigned By </th>
+					<th class="group-task-title">Task</th>
+					<th class="assigned-by-title">Assigned By </th>
 				</tr>
 				{% for i in singleMemberTasks %}
 				{% for j in i %}
-				<tr>
+				<tr class="rowUsedForSearch">
           <td><input type="checkbox" class="flag_mylist"  name="{{j.id}}">
-					<td onclick="window.location.href='/updateAssignedTask/{{j.id}}/{{grpid}}'">
+					<td class="group-task" onclick="window.location.href='/updateAssignedTask/{{j.id}}/{{grpid}}'">
             {{j.task}}
           </td>
-          <td onclick="window.location.href='/updateAssignedTask/{{j.id}}/{{grpid}}'">
+          <td class="assigned-by" onclick="window.location.href='/updateAssignedTask/{{j.id}}/{{grpid}}'">
             {{j.assigned_by}}
           </td>
 				</tr>

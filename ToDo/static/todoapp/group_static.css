@@ -33,9 +33,10 @@
     padding-top: 56px;
 }
 
-#grp-task td {
+#grp-task td,th {
 	cursor: pointer;
 }
+
 
 .createtask_outer {
 	font-weight: bold;

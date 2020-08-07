@@ -12,16 +12,25 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+    <!-- css for personal task except forms -->
     <link rel="stylesheet" href="{%static "todoapp/todo_create.css"%}">
-    <link rel="stylesheet" href="{%static "todoapp/form_style.css"%}">
-    <link rel="stylesheet" href="{%static "todoapp/group_static.css"%}">
 
+    <!-- css for all forms in personal task related pages -->
+    <link rel="stylesheet" href="{%static "todoapp/form_style.css"%}">
+    <!-- Css for all group related pages -->
+    <link rel="stylesheet" href="{%static "todoapp/group_static.css"%}">
+    <!-- Material Design Icon -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+  <!-- Script for task notification -->
   <script type="text/javascript" src="{%static 'todoapp/notification.js' %}" ></script>
+  <!-- script for all other functionality except notification and sorting -->
   <script type="text/javascript" src="{%static 'todoapp/function.js' %}" ></script>
 
   </head>
@@ -59,7 +68,8 @@
 
 
       {% endblock %}
-      <script type="text/javascript" src="{%static "todoapp/jquerry_sort.js" %}" defer></script>
+      <!-- jquerry for sorting table -->
+      <script type="text/javascript" src="{%static "todoapp/jquerry_sort.js" %}" ></script>
 
   </body>
 </html>

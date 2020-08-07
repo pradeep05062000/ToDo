@@ -7,6 +7,7 @@ $(document).ready(function(){
   	var taskArr = $(".task").map( function() { 
   		return $(this).text()
   	});
+
   	let temp  ;
   	let rows = document.getElementById("myTable").rows;
   	for(let j=0; j < taskArr.length; j++) {
@@ -33,6 +34,7 @@ $(document).ready(function(){
 });
 
 
+
 const clickDateOrTime = function () {
     
     let s, hr, temp = 0, dateArr = []  ;
@@ -42,6 +44,8 @@ const clickDateOrTime = function () {
     var timeArr = $(".time").map(function() {
       return $(this).text()
     });
+
+    //converting the time format as required for Date() object
     for(let i = 0; i < timeArr.length; i++) {
       s = timeArr[i];
       s = s.match(/(\d+)\:(\d+) (\w+\.\w+\.)/);
@@ -62,4 +66,65 @@ const clickDateOrTime = function () {
       }
     } 
 }
+
+
+
+$(document).ready(function() {
+
+  $(".assigned-to-title").click(() => sortGroup(".assigned-to"))
+
+});
+
+$(document).ready(function() {
+
+  $(".group-task-title").click(() => sortGroup(".group-task"))
+
+});
+
+$(document).ready(function() {
+
+  $(".assigned-by-title").click(() => sortGroup(".assigned-by"))
+
+});
+
+
+//Insertion sort logic is used in sortGroup()
+
+const sortGroup = async function(sortChoiceVariable) {
+     
+    var arr = await $(sortChoiceVariable).map(function () {
+      return $(this).text().toLowerCase();
+    });
+    
+    
+   
+    let rows = await document.getElementById("grp-task").rows;
+    
+
+   for(let i=1; i < arr.length; i++) {
+      let key = arr[i]
+      
+    for(var j= i-1;( j !== -1 && arr[j] > key); j--) {
+        if(arr[j] > key) {
+          
+          arr[j+1] = arr[j]
+          rows[i].parentNode.insertBefore(rows[j+1], rows[j+2]);
+          
+        }
+
+    }
+    
+    if(arr[j+1] > key) {
+      
+      arr[j+1] = key
+     rows[i].parentNode.insertBefore(rows[i+1], rows[j+2]);
+    }
+    
+
+   }
+
+   
+  }
+
+
 

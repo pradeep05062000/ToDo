@@ -45,6 +45,7 @@ def login_view(request):
     
     return render(request,"todoapp/login.html")
 
+#################################################################################################################
 
 @login_required(login_url='/login')           
 def mylist_view(request,mylist_choice=None): 
